@@ -651,6 +651,7 @@ function toggleFavoriteFilter(){
     if (data.length === 0) {
         searchResults.innerHTML = '<p style="text-align:center; color:var(--muted);">該当なし</p>';
         return;
+        updateFavoriteIcons();
     }
 
     const key = csvSelector.value;
@@ -701,15 +702,15 @@ function toggleFavoriteFilter(){
                     `<div class="field"><span class="field-label">${k}</span><span class="field-value">${v}</span></div>`
                 ).join('');
 
-            return `
-                <div class="result-item" id="item-${idx}">
-                    <button class="fav-btn" onclick="toggleFavorite('item-${idx}')">栞</button>
-                    <button class="copy-btn" onclick="copyDisplayedContent('item-${idx}')">コピー</button>
-                    <div class="item-body">
-                        ${fixedOrderHTML}
-                        ${restHTML}
-                    </div>
+           return `
+            <div class="result-item" id="${id}">
+                <button class="fav-btn" onclick="toggleFavorite('${id}')"></button>
+                <button class="copy-btn" onclick="copyDisplayedContent('${id}')">コピー</button>
+            
+                <div class="item-body">
+                    ${normalHTML}
                 </div>
+            </div>
             `;
         }
 
@@ -865,7 +866,6 @@ function toggleFavorite(id){
     }
 
     saveFavorites(favs);
-    updateFavoriteIcons();
 }
 
 function updateFavoriteIcons(){
