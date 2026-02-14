@@ -466,7 +466,7 @@ footer {
             <label>検索カテゴリ</label>
             <select id="csvSelector"></select>
         </div>
-        <button id="favFilterBtn" onclick="toggleFavoriteFilter()">栞</button>
+        <button id="favFilterBtn" onclick="toggleFavoriteFilter()">栞を挟んだページを確認</button>
         <div id="searchInputsContainer"></div>
         
         <div>
@@ -657,11 +657,11 @@ function toggleFavoriteFilter(){
 
     searchResults.innerHTML = data.map((item, idx) => {
         const favs = getFavorites();
-        const id = `item-${idx}`;
+        const id = `${key}_${item['番号'] || item['名称']}`;
 
         if(showOnlyFavorites && !favs.includes(id)){
-            return ''; 
-        }  
+            return '';
+        }
 
 
         /* ========= 人格 / 特異人格 専用 ========= */
@@ -703,7 +703,7 @@ function toggleFavoriteFilter(){
 
             return `
                 <div class="result-item" id="item-${idx}">
-                    <button class="fav-btn" onclick="toggleFavorite('item-${idx}')">☆</button>
+                    <button class="fav-btn" onclick="toggleFavorite('item-${idx}')">栞</button>
                     <button class="copy-btn" onclick="copyDisplayedContent('item-${idx}')">コピー</button>
                     <div class="item-body">
                         ${fixedOrderHTML}
@@ -720,9 +720,9 @@ function toggleFavoriteFilter(){
         }).join('');
 
         return `
-            <div class="result-item" id="item-${idx}">
-                <button class="copy-btn" onclick="copyDisplayedContent('item-${idx}')">コピー</button>
-                <div class="item-body">${normalHTML}</div>
+            <div class="result-item" id="${id}">
+            <button class="fav-btn" onclick="toggleFavorite('${id}')">
+            <button class="copy-btn" onclick="copyDisplayedContent('${id}')">
             </div>
         `;
     }).join('');
@@ -890,4 +890,3 @@ function updateFavoriteIcons(){
 </body>
 
 </html>
-
