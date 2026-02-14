@@ -1,17 +1,63 @@
+/* ============================
+   図書館風ナビゲーション
+============================ */
+
 .global-nav{
   display:flex;
-  gap:20px;
-  padding:12px 20px;
-  background:#1f140b;
-  border-bottom:1px solid #6b4b2a;
+  gap:22px;
+  padding:14px 28px;
+
+  background:
+    linear-gradient(180deg,#2a1a0f,#1a0f08);
+
+  border:2px solid #7a5a2e;
+  border-radius:12px;
+
+  box-shadow:
+    inset 0 0 8px rgba(255,255,255,0.05),
+    0 4px 10px rgba(0,0,0,0.7);
+
+  margin:12px auto 24px;
+  width:fit-content;
 }
+
+/* ボタン */
 
 .global-nav a{
-  color:#d6b873;
+  color:#e8d7a8;
   text-decoration:none;
-  font-size:0.9rem;
+  font-size:0.95rem;
+
+  padding:6px 14px;
+  border-radius:6px;
+
+  background:
+    linear-gradient(180deg,#3b2716,#2a1a10);
+
+  border:1px solid #6b4b2a;
+
+  box-shadow:
+    inset 0 0 4px rgba(255,255,255,0.08);
+
+  transition:
+    background 0.2s ease,
+    transform 0.15s ease;
 }
 
+/* ホバー */
+
 .global-nav a:hover{
-  text-decoration:underline;
+  background:
+    linear-gradient(180deg,#4a321c,#3a2616);
+  transform:translateY(-2px);
+  text-decoration:none;
+}
+
+/* 今いるページ */
+
+.global-nav a.active{
+  background:
+    linear-gradient(180deg,#d6b873,#b89a54);
+  color:#2a1a10;
+  border-color:#b89a54;
 }
