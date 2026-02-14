@@ -1,0 +1,82 @@
+body{
+    background:#120b06;
+    color:#e6d8b8;
+    font-family:"Yu Mincho","Hiragino Mincho ProN",serif;
+}
+
+.basic-wrapper{
+    max-width:900px;
+    margin:auto;
+    padding:40px 20px 80px;
+}
+
+h1{
+    text-align:center;
+    letter-spacing:0.2em;
+    margin-bottom:10px;
+}
+
+.intro{
+    text-align:center;
+    color:#c9b48a;
+    margin-bottom:40px;
+}
+
+section{
+    background:#1f140b;
+    border:1px solid #6b4b2a;
+    border-radius:10px;
+    padding:20px;
+    margin-bottom:24px;
+}
+
+h2{
+    font-size:1.1rem;
+    color:#d6b873;
+    border-bottom:1px solid #6b4b2a;
+    padding-bottom:6px;
+    margin-bottom:12px;
+}
+
+ol{
+    padding-left:20px;
+}
+
+.term{
+    margin-bottom:6px;
+}
+/* ===== 切り替え式 ===== */
+
+.accordion{
+    background:#1f140b;
+    border:1px solid #6b4b2a;
+    border-radius:10px;
+    margin-bottom:24px;
+    overflow:hidden;
+}
+
+.accordion-header{
+    width:100%;
+    background:none;
+    border:none;
+    color:#d6b873;
+    text-align:left;
+    font-size:1rem;
+    padding:14px 16px;
+    cursor:pointer;
+    letter-spacing:0.05em;
+}
+
+.accordion-header:hover{
+    background:rgba(255,255,255,0.05);
+}
+
+.accordion-body{
+    display:none;
+    padding:16px;
+    border-top:1px solid #6b4b2a;
+}
+
+.accordion.open .accordion-body{
+    display:block;
+}

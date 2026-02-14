@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>基礎室｜正岡式としょんか</title>
+
+<link rel="icon" href="favicon.ico">
+<link rel="stylesheet" href="common.css">
+<link rel="stylesheet" href="basic.css">
+</head>
+<style>
+  body{
+    padding-top:60px;
+}
+
+
+</style>
+<body>
+    <div class="top-white-bar">
+リンバスTRPG　正岡式としょんか
+</div>
+
+
+<nav class="global-nav">
+  <a href="index.html">受付</a>
+  <a href="database.html">資料室</a>
+  <a href="trial.html">試用室</a>
+  <a href="shop.html">購買</a>
+  <a href="workshop.html">基礎室</a>
+  <a href="help.html">案内板</a>
+</nav>
+
+<div class="basic-wrapper">
+
+<h1>基礎室</h1>
+<p class="intro">―― LimbusTRPGにおける基本資料をまとめた部屋です。</p>
+
+<section class="accordion">
+
+<button class="accordion-header">
+▶ LimbusTRPGについて
+</button>
+
+<div class="accordion-body">
+
+<p>
+ここに説明を書く
+</p>
+
+</div>
+</section>
+
+
+<section class="accordion">
+
+<button class="accordion-header">
+▶ キャラクター作成の流れ
+</button>
+
+<div class="accordion-body">
+
+<ol>
+<li>ここに説明を書く</li>
+<p>
+ここに説明を書く
+</p>
+<li>ここに説明を書く</li>
+<p>
+ここに説明を書く
+</p>
+<li>ここに説明を書く</li>
+<p>
+ここに説明を書く
+</p>
+<li>ここに説明を書く</li>
+<p>
+ここに説明を書く
+</p>
+</ol>
+
+</div>
+</section>
+
+
+<section class="accordion">
+
+<button class="accordion-header">
+▶ 戦闘の流れ
+</button>
+
+<div class="accordion-body">
+
+<ol>
+<li>ここに説明を書く</li>
+<p>
+ここに説明を書く
+</p>
+<li>ここに説明を書く</li>
+<p>
+ここに説明を書く
+</p>
+<li>ここに説明を書く</li>
+<p>
+ここに説明を書く
+</p>
+<li>ここに説明を書く</li>
+<p>
+ここに説明を書く
+</p>
+</ol>
+
+</div>
+</section>
+
+
+<section class="accordion">
+
+<button class="accordion-header">
+▶ 用語簡易解説
+</button>
+
+<div class="accordion-body">
+
+<div class="term"><b>HP</b>：ここに説明を書く</div>
+<div class="term"><b>SAN</b>：ここに説明を書く</div>
+<div class="term"><b>速度</b>：ここに説明を書く</div>
+
+</div>
+</section>
+
+
+</div>
+<script>
+document.querySelectorAll(".accordion-header").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+        const parent = btn.parentElement;
+        parent.classList.toggle("open");
+    });
+});
+</script>
+
+</body>
+</html>
