@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>リンバスTRPG　正岡式としょんか</title>
+    <link rel="icon" href="/path/to/favicon.ico">
+    <meta property="og:title" content="リンバスTRPG　正岡式としょんか">
+    <meta property="og:description" content="このサイトは @limbustrpg 様制作TRPGシステム用検索データベースです">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://rorocrate.github.io/Limbus-TRPG-Sheet/">
+    <meta property="og:image" content="https://rorocrate.github.io/Limbus-TRPG-Sheet/og-image.png">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="リンバスTRPG　正岡式としょんか">
+    <meta name="twitter:description" content="このサイトは @limbustrpg 様制作TRPGシステム用検索データベースです">
+    <meta name="twitter:image" content="https://rorocrate.github.io/Limbus-TRPG-Sheet/og-image.png">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="favicon.ico">
+    <link rel="icon" href="/path/to/favicon.ico">
+    <link rel="stylesheet" href="css/common.css">
+
+    
+    <style>
+/* ============================
+   フォント
+============================ */
+
+@font-face {
+    font-family: 'Corporate-Logo-Bold';
+    src: url('https://cdn.jsdelivr.net/gh/logotype/corporate-logo-font@master/fonts/Corporate-Logo-Bold-ver3.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'Corporate-Logo-Medium';
+    src: url('https://cdn.jsdelivr.net/gh/logotype/corporate-logo-font@master/fonts/Corporate-Logo-Medium-ver3.woff2') format('woff2');
+}
+
+/* ============================
+   変数
+============================ */
+
+:root {
+    --bg:#1b140d;
+    --card:#2a2016;
+    --muted:#a28a6a;
+    --accent:#c4a35a;
+    --radius:6px;
+}
+
+/* ============================
+   全体
+============================ */
+
+body {
+    background:
+        radial-gradient(circle at top,#3a2b1a 0%,#120c07 70%);
+    background-image:
+        url("https://www.transparenttextures.com/patterns/wood-pattern.png");
+    color:#f6f1e7;
+    margin:0;
+    padding-top:60px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    min-height:100vh;
+    overflow-y:auto;
+    font-family:"游明朝","Times New Roman",serif;
+    font-weight:500;
+    letter-spacing:0.02em;
+}
+
+/* ============================
+   上部バー
+============================ */
+
+.top-white-bar {
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:50px;
+    background:linear-gradient(180deg,#3b2a18,#24180e);
+    color:#e7d6ad;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:1.2rem;
+    z-index:9999;
+    border-bottom:1px solid var(--accent);
+    letter-spacing:0.15em;
+}
+
+/* ============================
+   メイン
+============================ */
+
+.search-container {
+    background:linear-gradient(180deg,#2f2418,#1f170f);
+    padding:20px;
+    border-radius:var(--radius);
+    width:95%;
+    max-width:800px;
+    border:2px solid var(--accent);
+    box-shadow:
+        0 0 30px rgba(0,0,0,0.7),
+        inset 0 0 40px rgba(0,0,0,0.5);
+    display:flex;
+    flex-direction:column;
+}
+
+/* ============================
+   見出し
+============================ */
+
+h2 {
+    text-align:center;
+    color:#e7d6ad;
+    margin:0;
+    font-size:1.4rem;
+    border-bottom:1px solid var(--accent);
+    padding-bottom:10px;
+    letter-spacing:0.2em;
+}
+
+/* ============================
+   検索フォーム
+============================ */
+
+.search-controls {
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    margin-top:10px;
+}
+
+/* 検索カテゴリ・共通キーワード */
+
+.search-controls > div {
+    width:100%;
+}
+
+/* ============================
+   動的検索入力 (修正版)
+============================ */
+
+#searchInputsContainer {
+    display: flex;
+    flex-wrap: wrap; 
+    gap: 15px;
+    margin-bottom: 10px;
+    align-items: flex-end; 
+}
+
+.search-input-group {
+    flex: 1 1 180px; 
+    display: flex;
+    flex-direction: column;
+    min-width: 140px; 
+}
+/* ============================
+   共通キーワード入力欄の調整
+============================ */
+.search-controls > div {
+    width: 100%;
+    margin-top: 5px;
+}
+
+input[type="text"],
+input[type="number"],
+select {
+    box-sizing: border-box; 
+    width: 100%;
+    height: 40px;
+    padding: 8px;
+    background: #241a11;
+    border: 1px solid #6e5a3c;
+    color: #f1e6d2;
+    border-radius: 6px;
+    font-size: 16px;
+}
+/* ============================
+   ラベル・入力欄
+============================ */
+
+label {
+    font-size:0.8rem;
+    color:#d4c1a0;
+    margin-bottom:3px;
+}
+
+input[type="text"],
+input[type="number"],
+select {
+    width:100%;
+    padding:10px;
+    background:#241a11;
+    border:1px solid #6e5a3c;
+    color:#f1e6d2;
+    border-radius:6px;
+    font-size:16px;
+}
+
+input:focus,
+select:focus {
+    border-color:var(--accent);
+    box-shadow:0 0 6px rgba(196,163,90,0.8);
+}
+
+/* ============================
+   検索結果エリア
+============================ */
+
+#searchResultWrapper {
+    margin-top:15px;
+    height:300px;
+    overflow-y:auto;
+    resize:vertical;
+    min-height:150px;
+    max-height:80vh;
+    border-top:1px solid rgba(255,255,255,0.1);
+    padding-top:10px;
+}
+
+/* ============================
+   検索結果カード
+============================ */
+
+.result-item {
+    background:linear-gradient(180deg,#3a2c1c,#2a1f14);
+    padding:12px;
+    margin-bottom:10px;
+    border-radius:6px;
+    border-left:5px solid var(--accent);
+    position:relative;
+}
+
+.item-body {
+    background:linear-gradient(180deg,#f4ecd8,#e6d7b8);
+    padding:12px;
+    border-radius:3px;
+    color:#3a2b1a;
+}
+/* ============================
+   栞型 お気に入りボタン
+============================ */
+
+.fav-btn{
+    position:absolute;
+    top:0;
+    left:10px;
+
+    width:22px;
+    height:48px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #4b3621 0%,
+            #2b1a0f 100%
+        );
+
+    border:none;
+    cursor:pointer;
+
+    /* 栞の形 */
+    clip-path: polygon(
+        0 0,
+        100% 0,
+        100% 85%,
+        50% 100%,
+        0 85%
+    );
+
+    border-radius:0 0 4px 4px;
+
+    color:transparent;   /* ★文字は見せない */
+
+    box-shadow:
+        inset 0 0 4px rgba(255,255,255,0.15),
+        0 3px 6px rgba(0,0,0,0.6);
+
+    transition:
+        transform 0.15s ease,
+        filter 0.2s ease;
+}
+
+/* ホバー */
+
+.fav-btn:hover{
+    transform:translateY(-2px);
+    filter:brightness(1.1);
+}
+
+.fav-btn::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:
+        repeating-linear-gradient(
+            45deg,
+            rgba(255,255,255,0.05),
+            rgba(255,255,255,0.05) 2px,
+            rgba(0,0,0,0.05) 2px,
+            rgba(0,0,0,0.05) 4px
+        );
+    pointer-events:none;
+}
+
+/* ============================
+   お気に入りON（栞が金色）
+============================ */
+
+.fav-btn.active{
+    background:
+        linear-gradient(
+            180deg,
+            #e7c66a 0%,
+            #b8963e 100%
+        );
+
+    box-shadow:
+        inset 0 0 6px rgba(255,255,255,0.4),
+        0 3px 8px rgba(0,0,0,0.7);
+}
+/* ============================
+   フィールド
+============================ */
+
+.field {
+    margin-bottom:6px;
+    display:flex;
+    flex-direction:column;
+}
+
+.field-label {
+    color:#7a5a2e;
+    font-size:0.8rem;
+    letter-spacing:0.03em;
+}
+
+.field-value {
+    font-size:0.95rem;
+    line-height:1.6;
+    color:#3a2b1a;
+    letter-spacing:0.01em;
+}
+
+.copy-btn{
+    position:absolute;
+    top:0;
+    right:12px;
+
+    width:34px;
+    height:60px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #a11f1f 0%,
+            #7e1414 100%
+        );
+
+    border:none;
+    cursor:pointer;
+
+    clip-path: polygon(
+        0 0,
+        100% 0,
+        100% 85%,
+        50% 100%,
+        0 85%
+    );
+
+    border-radius:0 0 6px 6px;
+
+    color:#f5e6e6;
+    font-size:10px;
+    font-weight:bold;
+    letter-spacing:0.05em;
+
+    /* ★ 縦書き */
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+
+    box-shadow:
+        inset 0 0 6px rgba(255,255,255,0.15),
+        inset 0 -4px 6px rgba(0,0,0,0.4),
+        0 3px 6px rgba(0,0,0,0.6);
+
+    transition:
+        transform 0.15s ease,
+        filter 0.2s ease;
+}
+
+.copy-btn.copied{
+    background:
+        linear-gradient(
+            180deg,
+            #2e7d32 0%,
+            #1b5e20 100%
+        );
+    color:#eaffea;
+}
+
+/* ============================
+   スクロールバー
+============================ */
+
+#searchResultWrapper::-webkit-scrollbar {
+    width:8px;
+}
+#searchResultWrapper::-webkit-scrollbar-thumb {
+    background:var(--accent);
+}
+#searchResultWrapper::-webkit-scrollbar-track {
+    background:#1a120b;
+}
+
+/* ============================
+   フッター
+============================ */
+
+footer {
+    width:100%;
+    padding:20px 0;
+    text-align:center;
+    color:#bfa989;
+}
+
+#favFilterBtn{
+    background:#3a2b1a;
+    color:#d6b873;
+    border:none;
+    padding:6px 14px;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:0.9rem;
+}
+
+#favFilterBtn.active{
+    background:#d6b873;
+    color:#3a2b1a;
+}
+
+    </style>
+</head>
+<nav class="global-nav">
+  <a href="reception.html">受付</a>
+  <a href="database.html">資料室</a>
+  <a href="trial.html">試用室</a>
+  <a href="shop.html">購買</a>
+  <a href="workshop.html">基礎室</a>
+  <a href="help.html">案内板</a>
+</nav>
+
+<body>
+
+<div class="top-white-bar">
+    リンバスTRPG　正岡式としょんか
+</div>
+
+<div class="search-container">
+    <h2>DATABASE ARCHIVE</h2>
+
+    <div class="search-controls">
+        <div>
+            <label>検索カテゴリ</label>
+            <select id="csvSelector"></select>
+        </div>
+        <button id="favFilterBtn" onclick="toggleFavoriteFilter()">栞</button>
+        <div id="searchInputsContainer"></div>
+        
+        <div>
+            <label>共通キーワード (全項目対象)</label>
+            <input id="searchInput" type="text" placeholder="キーワードを入力..." />
+        </div>
+    </div>
+
+    <div id="searchResultWrapper">
+        <div id="searchResults"></div>
+    </div>
+</div>
+
+<footer style="width: 100%; padding: 20px 0; text-align: center;">
+    <div style="font-size: 12px; line-height: 1.5; color: #ccc;">
+        このサイトは 
+        <a href="https://x.com/limbustrpg" target="_blank" style="color: #5560aa; text-decoration: none;">@limbustrpg</a> 
+        様制作TRPGシステム用検索データベースです
+        <br>
+        不具合や要望、更新情報は 
+        <a href="https://x.com/Roro_Crate" target="_blank" style="color: #5560aa; text-decoration: none;">@Roro_Crate</a> 
+        まで
+    </div>
+    
+</footer>
+<script>
+
+    let showOnlyFavorites = false;
+
+function toggleFavoriteFilter(){
+    showOnlyFavorites = !showOnlyFavorites;
+    document.getElementById("favFilterBtn")
+      .classList.toggle("active", showOnlyFavorites);
+    performSearch();
+}
+
+    const DATA_DIR = './data/';
+    const CSV_FILE_MAP = {
+        'identity': { name: '人格', url: DATA_DIR + 'identity.tsv' },
+        'singularidentity': { name: '特異人格', url: DATA_DIR + 'singularidentity.tsv' },
+        'suppassive': { name: 'サポートパッシブ', url: DATA_DIR + 'suppassive.tsv' },
+        'mental': { name: '精神', url: DATA_DIR + 'mental.tsv' },
+        'ego': { name: 'E.G.O', url: DATA_DIR + 'ego.tsv' },
+        'status': { name: '状態異常', url: DATA_DIR + 'status.tsv' },
+        'item': { name: 'アイテム', url: DATA_DIR + 'item.tsv' },
+        'strengthening': { name: '身体強化', url: DATA_DIR + 'strengthening.tsv' },
+        'others': { name: 'その他', url: DATA_DIR + 'others.tsv' }
+    };
+
+    const SEARCH_FIELDS = {
+        'identity': [{ id: 'f_no', label: '番号 (完全一致)', type: 'text', csvKey: '番号' },{ id: 'f_name', label: '名称', type: 'text', csvKey: '名称' }],
+        'singularidentity': [{ id: 'f_no', label: '番号 (完全一致)', type: 'text', csvKey: '番号' },{ id: 'f_name', label: '名称', type: 'text', csvKey: '名称' }],
+        'suppassive': [
+            { id: 'f_type', label: '種別', type: 'select', options: ['', '通常', '死亡'], csvKey: '種別' },
+            { id: 'f_res', label: '資源', type: 'select', options: ['', '憤怒', '色欲','怠惰','暴食','憂鬱','傲慢','嫉妬','なし'], csvKey: '資源' },
+            { id: 'f_own', label: '発動条件', type: 'select', options: ['', '保有', '共鳴','なし'], csvKey: '保有・共鳴' },
+            { id: 'f_price', label: '価格以下', type: 'number', csvKey: '価格' }
+        ],
+        'mental': [{ id: 'f_name', label: '名称', type: 'text', csvKey: '名称' },{ id: 'f_price', label: '価格以下', type: 'number', csvKey: '価格' }],
+        'ego': [
+            { id: 'f_no', label: '番号 (完全一致)', type: 'text', csvKey: '番号' },
+            { id: 'f_name', label: '名称', type: 'text', csvKey: '名称' },
+            { id: 'f_rank', label: '危険度', type: 'select', options: ['', 'ZAYIN', 'TETH', 'HE', 'WAW', 'ALEPH'], csvKey: '危険度' },
+            { id: 'f_price', label: '価格以下', type: 'number', csvKey: '価格' }
+        ],
+       'status': [{ id: 'f_name', label: '名称', type: 'text', csvKey: '名称' },{ id: 'f_cat', label: '分類', type: 'select', options: ['', 'バフ', 'デバフ', '中立バフ', '蓄積要素', '弾丸', '特殊', '固有バフ', '固有デバフ', '固有中立バフ', '固有弾丸', '固有処理'],csvKey: '分類' }],
+        'item': [{ id: 'f_name', label: '名称', type: 'text', csvKey: '名称' },{ id: 'f_cat', label: '分類', type: 'select', options: ['', '特殊', '回復', '強化'], csvKey: '分類' }],
+    'others': [
+        { id: 'f_name', label: '名称', type: 'text', csvKey: '名称' },
+        { id: 'f_cat', label: '分類', type: 'select', options: ['', '処理', 'タイミング', '位置関係'], csvKey: '分類' }
+    ],
+    'strengthening': [
+        { id: 'f_name', label: '名称', type: 'text', csvKey: '名称' },
+        { id: 'f_sys', label: '分類', type: 'select', options: ['','通常','特殊'], csvKey: '分類' },
+        { id: 'f_price', label: '価格', type: 'number', csvKey: '価格' }
+    ]
+    };
+
+    const csvSelector = document.getElementById('csvSelector');
+    const searchInput = document.getElementById('searchInput');
+    const searchInputsContainer = document.getElementById('searchInputsContainer');
+    const searchResults = document.getElementById('searchResults');
+
+    let currentData = [];
+    let cache = {};
+
+    Object.keys(CSV_FILE_MAP).forEach(k => {
+        const opt = document.createElement('option');
+        opt.value = k; opt.textContent = CSV_FILE_MAP[k].name;
+        csvSelector.appendChild(opt);
+    });
+
+    async function loadData() {
+        const key = csvSelector.value;
+        if (!cache[key]) {
+            try {
+                const res = await fetch(CSV_FILE_MAP[key].url);
+                const text = await res.text();
+                const lines = text.trim().split(/\r?\n/);
+                const headers = lines[0].split('\t').map(h => h.trim());
+                cache[key] = lines.slice(1).map(line => {
+                    const cols = line.split('\t');
+                    const obj = {};
+                    headers.forEach((h, i) => {obj[h] = (cols[i] || '').trim();});
+
+                    return obj;
+                });
+            } catch (e) {
+                searchResults.innerHTML = `<p style="color:red">データのロードに失敗しました</p>`;
+                return;
+            }
+        }
+        currentData = cache[key];
+        renderFields(key);
+        performSearch();
+
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth' // スルッと戻る（即座に戻したい場合は 'auto'）
+        });
+    }
+
+  function renderFields(key) {
+    searchInputsContainer.innerHTML = '';
+
+    SEARCH_FIELDS[key].forEach(f => {
+        const div = document.createElement('div');
+        div.className = 'search-input-group';
+
+        const label = document.createElement('label');
+        label.textContent = f.label;
+
+        const input = document.createElement(
+            f.type === 'select' ? 'select' : 'input'
+        );
+
+        if (f.type !== 'select') input.type = f.type;
+
+        if (f.type === 'select') {
+            f.options.forEach(o => {
+                const opt = document.createElement('option');
+                opt.value = o;
+                opt.textContent = o || 'すべて';
+                input.appendChild(opt);
+            });
+        }
+
+        input.id = f.id;
+        input.addEventListener('input', performSearch);
+
+        div.appendChild(label);
+        div.appendChild(input);
+        searchInputsContainer.appendChild(div);
+    });
+}
+
+    function performSearch() {
+        const query = searchInput.value.toLowerCase();
+        const key = csvSelector.value;
+        const fields = SEARCH_FIELDS[key];
+
+        const filtered = currentData.filter(item => {
+            const keywordMatch = !query || Object.values(item).some(v => String(v).toLowerCase().includes(query));
+            
+            const dynamicMatch = fields.every(f => {
+                const el = document.getElementById(f.id);
+                if (!el || el.value === '') return true;
+                const val = item[f.csvKey];
+                
+                if (f.id === 'f_no') return String(val) === String(el.value);
+                if (f.type === 'number') {if (val === '') return false;return Number(val) <= Number(el.value);}
+                return String(val).toLowerCase().includes(el.value.toLowerCase());
+            });
+            
+            return keywordMatch && dynamicMatch;
+        });
+
+        renderResults(filtered);
+    }
+
+    function renderResults(data) {
+    if (data.length === 0) {
+        searchResults.innerHTML = '<p style="text-align:center; color:var(--muted);">該当なし</p>';
+        return;
+    }
+
+    const key = csvSelector.value;
+
+    searchResults.innerHTML = data.map((item, idx) => {
+        const favs = getFavorites();
+        const id = `item-${idx}`;
+
+        if(showOnlyFavorites && !favs.includes(id)){
+            return ''; 
+        }  
+
+
+        /* ========= 人格 / 特異人格 専用 ========= */
+        if (key === 'identity' || key === 'singularidentity') {
+
+            const fixedOrderHTML = `
+                <div class="field"><span class="field-label">番号</span><span class="field-value">${item['番号'] || ''}</span></div>
+                <div class="field"><span class="field-label">名称</span><span class="field-value">${item['名称'] || ''}</span></div>
+
+                <div class="field">
+    <span class="field-label">能力値</span>
+    <span class="field-value">
+        HP:${item['HP'] || ''}　
+        SAN:${item['SAN'] || ''}　
+        速度:${item['速度'] || ''}　
+        弾丸:${item['弾丸'] || ''}
+    </span>
+</div>
+
+<div class="field">
+    <span class="field-label">耐性</span>
+    <span class="field-value">
+        斬撃:${item['斬撃'] || ''}　
+        打撃:${item['打撃'] || ''}　
+        貫通:${item['貫通'] || ''}
+    </span>
+</div>
+
+            `;
+
+            /* すでに表示したキーは除外 */
+            const excludedKeys = ['番号','名称','HP','SAN','速度','斬撃','打撃','貫通','弾丸'];
+
+            const restHTML = Object.entries(item)
+                .filter(([k, v]) => v && !excludedKeys.includes(k))
+                .map(([k, v]) =>
+                    `<div class="field"><span class="field-label">${k}</span><span class="field-value">${v}</span></div>`
+                ).join('');
+
+            return `
+                <div class="result-item" id="item-${idx}">
+                    <button class="fav-btn" onclick="toggleFavorite('item-${idx}')">☆</button>
+                    <button class="copy-btn" onclick="copyDisplayedContent('item-${idx}')">コピー</button>
+                    <div class="item-body">
+                        ${fixedOrderHTML}
+                        ${restHTML}
+                    </div>
+                </div>
+            `;
+        }
+
+        /* ========= その他カテゴリ（今まで通り） ========= */
+        const normalHTML = Object.entries(item).map(([k, v]) => {
+            if (!v) return '';
+            return `<div class="field"><span class="field-label">${k}</span><span class="field-value">${v}</span></div>`;
+        }).join('');
+
+        return `
+            <div class="result-item" id="item-${idx}">
+                <button class="copy-btn" onclick="copyDisplayedContent('item-${idx}')">コピー</button>
+                <div class="item-body">${normalHTML}</div>
+            </div>
+        `;
+    }).join('');
+}
+
+
+ async function copyDisplayedContent(id) {
+        const itemBody = document.querySelector(`#${id} .item-body`);
+        const btn = document.querySelector(`#${id} .copy-btn`);
+        const fields = itemBody.querySelectorAll('.field');
+        
+        let textToCopy = "";
+        const key = csvSelector.value;
+
+        // データをオブジェクトに格納
+        const data = {};
+        fields.forEach(f => {
+        const label = f.querySelector('.field-label').innerText.trim();
+        const value = f.querySelector('.field-value').innerText.trim();
+
+        // 能力値を分解
+        if (label === '能力値') {
+            value.split(/　|\s+/).forEach(part => {
+                const [k, v] = part.split(':');
+                if (k && v) data[k.trim()] = v.trim();
+            });
+            return;
+        }
+
+        // 耐性を分解
+        if (label === '耐性') {
+            value.split(/　|\s+/).forEach(part => {
+                const [k, v] = part.split(':');
+                if (k && v) data[k.trim()] = v.trim();
+            });
+            return;
+        }
+
+        data[label] = value;
+    });
+
+        if (key === 'identity' || key === 'singularidentity') {
+
+        textToCopy =
+`名称:${data['名称'] || ''}
+HP:${data['HP'] || ''}　SAN:${data['SAN'] || ''}　速度:${data['速度'] || ''}
+斬撃:${data['斬撃'] || ''}　貫通:${data['貫通'] || ''}　打撃:${data['打撃'] || ''}　弾丸:${data['弾丸'] || ''}
+
+${data['パッシブ名'] || ''}　${data['発動条件'] || ''}
+${data['効果'] || ''}
+
+戦術0名称:${data['戦術0名称'] || ''}　戦術0効果:${data['戦術0効果'] || ''}
+戦術1名称:${data['戦術1名称'] || ''}　戦術1効果:${data['戦術1効果'] || ''}
+戦術2名称:${data['戦術2名称'] || ''}　戦術2効果:${data['戦術2効果'] || ''}
+戦術3名称:${data['戦術3名称'] || ''}　戦術3効果:${data['戦術3効果'] || ''}
+戦術4名称:${data['戦術4名称'] || ''}　戦術4効果:${data['戦術4効果'] || ''}
+
+強化スキル:${data['強化スキル'] || ''}
+固有:${data['固有'] || ''}`;
+        } else if (key === 'mental') {
+            // 精神用カスタムフォーマット
+            textToCopy = 
+                `名称:${data['名称'] || ''}\n` +
+                `常時発動:${data['常時発動'] || ''}\n` +
+                `士気低下効果:${data['士気低下効果'] || ''}\n` +
+                `混乱効果:${data['混乱効果'] || ''}`;
+
+
+        } else if (key === 'status') {
+            // 状態異常用カスタムフォーマット
+            textToCopy = 
+                `【${data['名称'] || ''}】${data['分類'] || ''}　最大数:${data['最大数'] || ''}\n` +
+                `効果:${data['効果'] || ''}`;
+        
+        
+        
+        } else if (key === 'suppassive') {
+            // サポートパッシブ用
+            const name = data['名称'] || '';
+            const res = data['資源'] || '';
+            const cond = data['保有・共鳴'] || '';
+            const effect = data['効果'] || '';
+            textToCopy = `名称:${name}\n発動条件:${res}${cond}\n効果:${effect}`;
+
+        } else if (key === 'ego') {
+            // E.G.O用
+            const rank = data['危険度'] || '';
+            const name = data['名称'] || '';
+            const res = data['資源'] || '';
+            const pName = data['E.G.O パッシブ名'] || '';
+            const cond = data['発動条件'] || '';
+            const effect = data['効果'] || '';
+            const aAttr = data['覚醒スキル属性'] || '';
+            const aEffect = data['覚醒スキル効果'] || '';
+            const eAttr = data['侵蝕スキル属性'] || '';
+            const eEffect = data['侵蝕スキル'] || '';
+            const unique = data['固有'] || '';
+
+            textToCopy = `【${rank}】名称:${name}\n資源:${res}\nパッシブ名:${pName}\n発動条件:${cond}\n効果:${effect}\n\n覚醒スキル属性:${aAttr}\n覚醒スキル効果:${aEffect}\n\n侵蝕スキル属性:${eAttr}\n侵蝕スキル:${eEffect}\n\n固有:${unique}`;
+
+        } else {
+            // その他のカテゴリ
+            textToCopy = Array.from(fields).map(f => {
+                const label = f.querySelector('.field-label').innerText;
+                const value = f.querySelector('.field-value').innerText;
+                return `${label}: ${value}`;
+            }).join('\n');
+        }
+
+        try {
+    await navigator.clipboard.writeText(textToCopy);
+
+    btn.innerText = '完了';
+    btn.classList.add('copied');   // ← 緑にする
+
+    setTimeout(() => {
+        btn.innerText = 'コピー';
+        btn.classList.remove('copied'); // ← 赤に戻す
+    }, 800);
+
+} catch (err) {
+    alert('コピーに失敗しました');
+}
+    }
+function getFavorites(){
+    return JSON.parse(localStorage.getItem("favorites") || "[]");
+}
+
+function saveFavorites(arr){
+    localStorage.setItem("favorites", JSON.stringify(arr));
+}
+
+function toggleFavorite(id){
+    let favs = getFavorites();
+
+    if(favs.includes(id)){
+        favs = favs.filter(f=>f!==id);
+    }else{
+        favs.push(id);
+    }
+
+    saveFavorites(favs);
+    updateFavoriteIcons();
+}
+
+function updateFavoriteIcons(){
+    const favs = getFavorites();
+
+    document.querySelectorAll(".fav-btn").forEach(btn=>{
+        const id = btn.getAttribute("onclick")
+            .match(/'(.*)'/)[1];
+
+        if(favs.includes(id)){
+            btn.classList.add("active");
+        }else{
+            btn.classList.remove("active");
+        }
+    });
+}
+    csvSelector.onchange = loadData;
+    searchInput.oninput = performSearch;
+    window.onload = loadData;
+</script>
+
+</body>
+</html>

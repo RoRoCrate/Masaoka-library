@@ -1,0 +1,114 @@
+body{
+    margin:0;
+    min-height:100vh;
+    background:
+        radial-gradient(circle at top, #2b1d12 0%, #120b06 70%);
+    font-family:"Yu Mincho","Hiragino Mincho ProN",serif;
+    color:#e6d8b8;
+}
+
+.reception-wrapper{
+    max-width:900px;
+    margin:auto;
+    padding:60px 20px;
+    text-align:center;
+}
+
+.library-title{
+    font-size:2.4rem;
+    letter-spacing:0.2em;
+    margin-bottom:10px;
+    margin-top:55px;
+}
+
+.librarian-message{
+    font-size:1rem;
+    color:#c9b48a;
+    margin-bottom:40px;
+}
+
+/* 部屋一覧 */
+
+.room-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:24px;
+}
+
+.room-card{
+    background:
+        linear-gradient(145deg,#3a2615,#24160b);
+    border:1px solid #7a5a2e;
+    padding:30px 10px;
+    text-decoration:none;
+    color:#f0e2c0;
+    border-radius:10px;
+    box-shadow:0 6px 10px rgba(0,0,0,0.5);
+    transition:transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.room-card:hover{
+    transform:translateY(-4px);
+    box-shadow:0 10px 16px rgba(0,0,0,0.7);
+}
+
+.room-name{
+    display:block;
+    font-size:1.2rem;
+    margin-bottom:6px;
+    letter-spacing:0.1em;
+}
+
+.room-desc{
+    font-size:0.8rem;
+    color:#cdbb96;
+}
+
+#secret-link{
+    cursor:pointer;
+    color:#f2d36b;
+    text-shadow:0 0 6px rgba(242,211,107,0.6);
+}
+
+#secret-link:hover{
+    color:#ffeaa0;
+    text-shadow:0 0 10px rgba(255,234,160,0.9);
+}
+
+/* 正岡に隠しリンク */
+
+#secret-link{
+    cursor:pointer;
+    color:#f2d36b;
+    text-shadow:0 0 6px rgba(242,211,107,0.6);
+}
+
+#secret-link:hover{
+    color:#ffeaa0;
+    text-shadow:0 0 10px rgba(255,234,160,0.9);
+}
+
+/* タイトル横並び */
+
+.title-area{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:24px;              /* ロゴと文字の間隔 */
+    margin-bottom:50px;   /* ↓ ボタン群との距離 */
+}
+
+/* ロゴ */
+
+.site-logo{
+    width:150px; height:150px;
+}
+
+
+/* PC前提 */
+
+@media (max-width:900px){
+    .room-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+}

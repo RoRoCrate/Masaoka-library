@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>正岡式としょんか｜受付</title>
+<link rel="stylesheet" href="reception.css">
+<link rel="stylesheet" href="css/common.css">
+
+</head>
+<nav class="global-nav">
+  <a href="reception.html">受付</a>
+  <a href="database.html">資料室</a>
+  <a href="trial.html">試用室</a>
+  <a href="shop.html">購買</a>
+  <a href="workshop.html">基礎室</a>
+  <a href="help.html">案内板</a>
+</nav>
+
+<body>
+
+<div class="reception-wrapper">
+    <div class="title-area">
+    <img src="logo.png" class="site-logo">
+    <h1 class="library-title">
+        <span id="secret-link">正岡</span>式としょんか
+    </h1>
+</div>
+
+     <p class="librarian-message">── ようこそ、未来の囚人。どうかあなたの理想が見つかりますように。</p>
+
+    <div class="room-grid">
+
+        <a href="database.html" class="room-card">
+            <span class="room-name">資料室</span>
+            <span class="room-desc">データベース検索</span>
+        </a>
+
+        <a href="trial.html" class="room-card">
+            <span class="room-name">試用室</span>
+            <span class="room-desc">ダメージ計算・試し振り</span>
+        </a>
+
+        <a href="shop.html" class="room-card">
+            <span class="room-name">購買</span>
+            <span class="room-desc">購入予定一覧</span>
+        </a>
+
+        <a href="workshop.html" class="room-card">
+            <span class="room-name">基礎室</span>
+            <span class="room-desc">LimbusTRPGの基本情報</span>
+        </a>
+
+        <a href="librarian.html" class="room-card">
+            <span class="room-name">司書室</span>
+            <span class="room-desc">管理人の部屋</span>
+        </a>
+
+        <a href="help.html" class="room-card">
+            <span class="room-name">案内板</span>
+            <span class="room-desc">ヘルプ</span>
+        </a>
+
+    </div>
+
+</div>
+<script>
+document.getElementById("secret-link")
+  .addEventListener("click",()=>{
+    location.href="hidden.html";
+});
+</script>
+</body>
+</html>
