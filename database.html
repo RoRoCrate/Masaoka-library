@@ -585,7 +585,7 @@ function toggleFavoriteFilter(){
 
         window.scrollTo({
             top: 0,
-            behavior: 'smooth' 
+            behavior: 'smooth' // スルッと戻る（即座に戻したい場合は 'auto'）
         });
     }
 
@@ -648,86 +648,92 @@ function toggleFavoriteFilter(){
     }
 
     function renderResults(data) {
+
     if (data.length === 0) {
-        searchResults.innerHTML = '<p style="text-align:center; color:var(--muted);">該当なし</p>';
+        searchResults.innerHTML =
+          '<p style="text-align:center; color:var(--muted);">該当なし</p>';
         return;
-        updateFavoriteIcons();
     }
 
     const key = csvSelector.value;
+    const favs = getFavorites();
 
     searchResults.innerHTML = data.map((item, idx) => {
-        const favs = getFavorites();
+
         const id = `${key}_${item['番号'] || item['名称']}`;
 
-        if(showOnlyFavorites && !favs.includes(id)){
+        if (showOnlyFavorites && !favs.includes(id)) {
             return '';
         }
 
-
-        /* ========= 人格 / 特異人格 専用 ========= */
+        /* ========= 人格 / 特異人格 ========= */
         if (key === 'identity' || key === 'singularidentity') {
 
             const fixedOrderHTML = `
-                <div class="field"><span class="field-label">番号</span><span class="field-value">${item['番号'] || ''}</span></div>
-                <div class="field"><span class="field-label">名称</span><span class="field-value">${item['名称'] || ''}</span></div>
+<div class="field"><span class="field-label">番号</span><span class="field-value">${item['番号']||''}</span></div>
+<div class="field"><span class="field-label">名称</span><span class="field-value">${item['名称']||''}</span></div>
 
-                <div class="field">
-    <span class="field-label">能力値</span>
-    <span class="field-value">
-        HP:${item['HP'] || ''}　
-        SAN:${item['SAN'] || ''}　
-        速度:${item['速度'] || ''}　
-        弾丸:${item['弾丸'] || ''}
-    </span>
+<div class="field">
+<span class="field-label">能力値</span>
+<span class="field-value">
+HP:${item['HP']||''}　
+SAN:${item['SAN']||''}　
+速度:${item['速度']||''}　
+弾丸:${item['弾丸']||''}
+</span>
 </div>
 
 <div class="field">
-    <span class="field-label">耐性</span>
-    <span class="field-value">
-        斬撃:${item['斬撃'] || ''}　
-        打撃:${item['打撃'] || ''}　
-        貫通:${item['貫通'] || ''}
-    </span>
+<span class="field-label">耐性</span>
+<span class="field-value">
+斬撃:${item['斬撃']||''}　
+打撃:${item['打撃']||''}　
+貫通:${item['貫通']||''}
+</span>
 </div>
+`;
 
-            `;
-
-            /* すでに表示したキーは除外 */
-            const excludedKeys = ['番号','名称','HP','SAN','速度','斬撃','打撃','貫通','弾丸'];
+            const excludedKeys =
+            ['番号','名称','HP','SAN','速度','弾丸','斬撃','打撃','貫通'];
 
             const restHTML = Object.entries(item)
-                .filter(([k, v]) => v && !excludedKeys.includes(k))
-                .map(([k, v]) =>
-                    `<div class="field"><span class="field-label">${k}</span><span class="field-value">${v}</span></div>`
-                ).join('');
+              .filter(([k,v]) => v && !excludedKeys.includes(k))
+              .map(([k,v]) =>
+                `<div class="field"><span class="field-label">${k}</span><span class="field-value">${v}</span></div>`
+              ).join('');
 
-           return `
-            <div class="result-item" id="${id}">
-                <button class="fav-btn" onclick="toggleFavorite('${id}')"></button>
-                <button class="copy-btn" onclick="copyDisplayedContent('${id}')">コピー</button>
-            
-                <div class="item-body">
-                    ${normalHTML}
-                </div>
-            </div>
-            `;
+            return `
+<div class="result-item" id="${id}">
+    <button class="fav-btn" onclick="toggleFavorite('${id}')"></button>
+    <button class="copy-btn" onclick="copyDisplayedContent('${id}')">コピー</button>
+    <div class="item-body">
+        ${fixedOrderHTML}
+        ${restHTML}
+    </div>
+</div>`;
         }
 
-        /* ========= その他カテゴリ（今まで通り） ========= */
-        const normalHTML = Object.entries(item).map(([k, v]) => {
-            if (!v) return '';
-            return `<div class="field"><span class="field-label">${k}</span><span class="field-value">${v}</span></div>`;
-        }).join('');
+        /* ========= その他 ========= */
+
+        const normalHTML = Object.entries(item)
+          .filter(([k,v]) => v)
+          .map(([k,v]) =>
+            `<div class="field"><span class="field-label">${k}</span><span class="field-value">${v}</span></div>`
+          ).join('');
 
         return `
-            <div class="result-item" id="${id}">
-            <button class="fav-btn" onclick="toggleFavorite('${id}')">
-            <button class="copy-btn" onclick="copyDisplayedContent('${id}')">
-            </div>
-        `;
+<div class="result-item" id="${id}">
+    <button class="fav-btn" onclick="toggleFavorite('${id}')"></button>
+    <button class="copy-btn" onclick="copyDisplayedContent('${id}')">コピー</button>
+    <div class="item-body">
+        ${normalHTML}
+    </div>
+</div>`;
     }).join('');
+
+    updateFavoriteIcons();
 }
+
 
 
  async function copyDisplayedContent(id) {
