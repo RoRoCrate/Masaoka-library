@@ -872,7 +872,9 @@ function toggleFavorite(id){
     }
 
     saveFavorites(favs);
+    updateFavoriteIcons();   // ← これを追加
 }
+
 
 function updateFavoriteIcons(){
     const favs = getFavorites();
