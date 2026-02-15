@@ -2,9 +2,24 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>資料室｜正岡式としょんか</title>
-    <link rel="icon" type="image/png" href="favicon.png">
+    <title>リンバスTRPG　正岡式としょんか</title>
+    <link rel="icon" href="/path/to/favicon.ico">
+    <meta property="og:title" content="リンバスTRPG　正岡式としょんか">
+    <meta property="og:description" content="このサイトは @limbustrpg 様制作TRPGシステム用検索データベースです">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://rorocrate.github.io/Limbus-TRPG-Sheet/">
+    <meta property="og:image" content="https://rorocrate.github.io/Limbus-TRPG-Sheet/og-image.png">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="リンバスTRPG　正岡式としょんか">
+    <meta name="twitter:description" content="このサイトは @limbustrpg 様制作TRPGシステム用検索データベースです">
+    <meta name="twitter:image" content="https://rorocrate.github.io/Limbus-TRPG-Sheet/og-image.png">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="favicon.ico">
+    <link rel="icon" href="/path/to/favicon.ico">
     <link rel="stylesheet" href="common.css">
+
     
     <style>
 /* ============================
@@ -432,7 +447,7 @@ footer {
 <body>
 <nav class="global-nav">
   <a href="index.html">受付</a>
-  <a href="database.html" class="active">資料室</a>
+  <a href="database.html">資料室</a>
   <a href="trial.html">試用室</a>
   <a href="shop.html">購買</a>
   <a href="workshop.html">基礎室</a>
@@ -464,6 +479,19 @@ footer {
         <div id="searchResults"></div>
     </div>
 </div>
+
+<footer style="width: 100%; padding: 20px 0; text-align: center;">
+    <div style="font-size: 12px; line-height: 1.5; color: #ccc;">
+        このサイトは 
+        <a href="https://x.com/limbustrpg" target="_blank" style="color: #5560aa; text-decoration: none;">@limbustrpg</a> 
+        様制作TRPGシステム用検索データベースです
+        <br>
+        不具合や要望、更新情報は 
+        <a href="https://x.com/Roro_Crate" target="_blank" style="color: #5560aa; text-decoration: none;">@Roro_Crate</a> 
+        まで
+    </div>
+    
+</footer>
 <script>
 
     let showOnlyFavorites = false;
@@ -632,7 +660,8 @@ function toggleFavoriteFilter(){
 
     searchResults.innerHTML = data.map((item, idx) => {
 
-        const id = `${key}_${item['番号'] || item['名称']}`;
+        const id = `${key}_${idx}_${item['番号'] || item['名称'] || item['分類'] || 'item'}`;
+
 
         if (showOnlyFavorites && !favs.includes(id)) {
             return '';
@@ -870,11 +899,3 @@ function updateFavoriteIcons(){
 </body>
 
 </html>
-
-
-
-
-
-
-
-
