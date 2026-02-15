@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>案内板｜正岡式としょんか</title>
+
+    <link rel="icon" type="image/png" href="favicon.png">
+<link rel="stylesheet" href="common.css">
+
+<style>
+body{
+    padding-top:60px;
+    background:#120b06;
+    color:#e6d8b8;
+    font-family:"Yu Mincho","Hiragino Mincho ProN",serif;
+}
+
+.help-wrapper{
+    max-width:900px;
+    margin:40px auto;
+    padding:30px;
+    background:#1f140b;
+    border:1px solid #6b4b2a;
+    border-radius:12px;
+    box-shadow:0 0 12px rgba(0,0,0,0.6);
+}
+
+h1{
+    text-align:center;
+    margin-bottom:30px;
+    letter-spacing:0.2em;
+}
+
+.section{
+    border-top:1px solid #6b4b2a;
+    padding-top:20px;
+    margin-top:30px;
+}
+
+.section h2{
+    color:#d6b873;
+    margin-bottom:12px;
+}
+
+ul{
+    padding-left:20px;
+}
+
+li{
+    margin-bottom:6px;
+}
+/* ===== フォーム ===== */
+
+.form-row{
+    display:flex;
+    flex-direction:column;
+    margin-bottom:14px;
+}
+
+.form-row label{
+    color:#d6b873;
+    margin-bottom:4px;
+}
+
+input, textarea{
+    background:#2a1a10;
+    border:1px solid #6b4b2a;
+    color:#e6d8b8;
+    padding:6px;
+    border-radius:6px;
+}
+
+input:focus, textarea:focus{
+    outline:none;
+    border-color:#d6b873;
+}
+
+form button{
+    background:#7a5a2e;
+    color:#fff;
+    border:none;
+    padding:8px 18px;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+form button:hover{
+    background:#9a7740;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="top-white-bar">
+リンバスTRPG　正岡式としょんか
+</div>
+
+<nav class="global-nav">
+  <a href="index.html">受付</a>
+  <a href="database.html">資料室</a>
+  <a href="trial.html">試用室</a>
+  <a href="shop.html">購買</a>
+  <a href="workshop.html">基礎室</a>
+  <a href="help.html" class="active">案内板</a>
+</nav>
+
+<div class="help-wrapper">
+
+<h1>案内板</h1>
+
+<p style="text-align:center;">
+―― 正岡式としょんか の使い方案内 ――
+</p>
+
+<!-- 概要 -->
+
+<div class="section">
+<h2>このサイトについて</h2>
+<p>
+本サイトは「LimbusTRPG」のデータベースおよび補助ツールを提供する非公式サイトです。
+</p>
+</div>
+
+<!-- 部屋説明 -->
+
+<div class="section">
+<h2>各部屋の説明</h2>
+<ul>
+<li>受付：入口・全体案内</li>
+<li>資料室：データ検索</li>
+<li>試用室：ダイス・計算</li>
+<li>購買：アイテム管理</li>
+<li>基礎室：ルール解説</li>
+<li>司書室：公式情報・資料</li>
+</ul>
+</div>
+
+<!-- 検索 -->
+
+<div class="section">
+<h2>検索の仕方</h2>
+<ol>
+<li>検索カテゴリを選択</li>
+<li>条件を入力</li>
+<li>検索ボタンを押す</li>
+</ol>
+</div>
+
+<!-- お気に入り -->
+
+<div class="section">
+<h2>お気に入り機能</h2>
+<ul>
+<li>各データ右上の栞を押すと保存</li>
+<li>お気に入りボタンで絞り込み</li>
+<li>ブラウザに保存されます</li>
+</ul>
+</div>
+
+<!-- FAQ -->
+
+<div class="section">
+<h2>よくある質問</h2>
+
+<p><b>Q.</b> データが表示されません</p>
+<p><b>A.</b> カテゴリと条件を確認し、検索欄に入力した内容が正確であるか確認してください。</p>
+
+<p><b>Q.</b> スマホで使えますか？</p>
+<p><b>A.</b> 現在調整中です。</p>
+
+</div>
+<!-- バグ報告 -->
+
+<div class="section">
+<h2>バグ報告フォーム</h2>
+
+<p>
+不具合・表示崩れ・要望などがありましたら、こちらからお知らせください。
+</p>
+
+<form action="mailto:roro.crate@gmail.com" method="post" enctype="text/plain">
+
+<div class="form-row">
+<label>お名前（任意）</label>
+<input type="text" name="name">
+</div>
+
+<div class="form-row">
+<label>発生しているページ・項目名</label>
+<input type="text" name="page">
+</div>
+
+<div class="form-row">
+<label>内容</label>
+<textarea name="message" rows="6"></textarea>
+</div>
+
+<button type="submit">送信</button>
+
+</form>
+
+</div>
+
+</div>
+
+</body>
+</html>
