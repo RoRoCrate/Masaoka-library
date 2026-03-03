@@ -632,46 +632,35 @@ function renderResults(data) {
         return;
     }
     const key = csvSelector.value;
-    const favs = getFavorites();
+    const favs = getFavorites(); // ここで取得
 
-    searchResults.innerHTML = data.map((item, idx) => {
-        // IDに特殊文字が入らないよう安全な形式にする
+    const html = data.map((item, idx) => {
+        const uniqueKey = item['番号'] || item['名称'] || idx;
+        const favId = `${key}_${uniqueKey}`;
         const safeId = `item-${key}-${idx}`;
-        const favId = `${key}_${idx}_${item['番号'] || item['名称'] || 'id'}`;
 
         if (showOnlyFavorites && !favs.includes(favId)) return '';
 
-        let contentHTML = '';
-        if (key === 'identity' || key === 'singularidentity') {
-            const fixedOrderHTML = `
-                <div class="field"><span class="field-label">番号</span><span class="field-value">${item['番号'] || ''}</span></div>
-                <div class="field"><span class="field-label">名称</span><span class="field-value">${item['名称'] || ''}</span></div>
-                <div class="field"><span class="field-label">能力値</span><span class="field-value">HP:${item['HP'] || ''}　SAN:${item['SAN'] || ''}　速度:${item['速度'] || ''}　弾丸:${item['弾丸'] || ''}</span></div>
-                <div class="field"><span class="field-label">耐性</span><span class="field-value">斬撃:${item['斬撃'] || ''}　打撃:${item['打撃'] || ''}　貫通:${item['貫通'] || ''}</span></div>
-            `;
-            const excludedKeys = ['番号', '名称', 'HP', 'SAN', '速度', '弾丸', '斬撃', '打撃', '貫通'];
-            const restHTML = Object.entries(item)
-                .filter(([k, v]) => v && !excludedKeys.includes(k))
-                .map(([k, v]) => `<div class="field"><span class="field-label">${k}</span><span class="field-value">${v}</span></div>`).join('');
-            contentHTML = fixedOrderHTML + restHTML;
-        } else {
-            contentHTML = Object.entries(item)
-                .filter(([k, v]) => v)
-                .map(([k, v]) => `<div class="field"><span class="field-label">${k}</span><span class="field-value">${v}</span></div>`).join('');
-        }
+        const activeClass = favs.includes(favId) ? 'active' : '';
 
         return `
             <div class="result-item" id="${safeId}">
-                <button class="fav-btn" data-favid="${favId}" onclick="toggleFavorite('${favId}')"></button>
+                <button class="fav-btn ${activeClass}" data-favid="${favId}" onclick="toggleFavorite('${favId}')"></button>
                 <button class="copy-btn" onclick="copyDisplayedContent(this)">コピー</button>
                 <div class="item-body">${contentHTML}</div>
             </div>`;
     }).join('');
+
+    if (showOnlyFavorites && html.trim() === "") {
+        searchResults.innerHTML = '<p style="text-align:center; color:var(--muted);">栞を挟んだ項目はありません</p>';
+    } else {
+        searchResults.innerHTML = html;
+    }
+
     updateFavoriteIcons();
 }
 
 async function copyDisplayedContent(btn) {
-    // ボタン自身から親要素を辿ることで、IDの不備に左右されず要素を特定
     const resultItem = btn.closest('.result-item');
     const itemBody = resultItem ? resultItem.querySelector('.item-body') : null;
     
@@ -758,7 +747,12 @@ function toggleFavorite(id) {
         favs.push(id);
     }
     saveFavorites(favs);
-    updateFavoriteIcons();
+    
+    if (showOnlyFavorites) {
+        performSearch();
+    } else {
+        updateFavoriteIcons();
+    }
 }
 
 function updateFavoriteIcons() {
@@ -781,7 +775,6 @@ window.onload = loadData;
 </body>
 
 </html>
-
 
 
 
