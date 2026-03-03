@@ -493,118 +493,104 @@ footer {
     
 </footer>
 <script>
+let showOnlyFavorites = false;
 
-    let showOnlyFavorites = false;
-
-function toggleFavoriteFilter(){
+function toggleFavoriteFilter() {
     showOnlyFavorites = !showOnlyFavorites;
-    document.getElementById("favFilterBtn")
-      .classList.toggle("active", showOnlyFavorites);
+    document.getElementById("favFilterBtn").classList.toggle("active", showOnlyFavorites);
     performSearch();
 }
 
-    const DATA_DIR = './data/';
-    const CSV_FILE_MAP = {
-        'identity': { name: '人格', url: DATA_DIR + 'identity.tsv' },
-        'singularidentity': { name: '特異人格', url: DATA_DIR + 'singularidentity.tsv' },
-        'suppassive': { name: 'サポートパッシブ', url: DATA_DIR + 'suppassive.tsv' },
-        'mental': { name: '精神', url: DATA_DIR + 'mental.tsv' },
-        'ego': { name: 'E.G.O', url: DATA_DIR + 'ego.tsv' },
-        'status': { name: '状態異常', url: DATA_DIR + 'status.tsv' },
-        'item': { name: 'アイテム', url: DATA_DIR + 'item.tsv' },
-        'strengthening': { name: '身体強化', url: DATA_DIR + 'strengthening.tsv' },
-        'others': { name: 'その他', url: DATA_DIR + 'others.tsv' }
-    };
+const DATA_DIR = './data/';
+const CSV_FILE_MAP = {
+    'identity': { name: '人格', url: DATA_DIR + 'identity.tsv' },
+    'singularidentity': { name: '特異人格', url: DATA_DIR + 'singularidentity.tsv' },
+    'suppassive': { name: 'サポートパッシブ', url: DATA_DIR + 'suppassive.tsv' },
+    'mental': { name: '精神', url: DATA_DIR + 'mental.tsv' },
+    'ego': { name: 'E.G.O', url: DATA_DIR + 'ego.tsv' },
+    'status': { name: '状態異常', url: DATA_DIR + 'status.tsv' },
+    'item': { name: 'アイテム', url: DATA_DIR + 'item.tsv' },
+    'strengthening': { name: '身体強化', url: DATA_DIR + 'strengthening.tsv' },
+    'others': { name: 'その他', url: DATA_DIR + 'others.tsv' }
+};
 
-    const SEARCH_FIELDS = {
-        'identity': [{ id: 'f_no', label: '番号 (完全一致)', type: 'text', csvKey: '番号' },{ id: 'f_name', label: '名称', type: 'text', csvKey: '名称' }],
-        'singularidentity': [{ id: 'f_no', label: '番号 (完全一致)', type: 'text', csvKey: '番号' },{ id: 'f_name', label: '名称', type: 'text', csvKey: '名称' }],
-        'suppassive': [
-            { id: 'f_type', label: '種別', type: 'select', options: ['', '通常', '死亡'], csvKey: '種別' },
-            { id: 'f_res', label: '資源', type: 'select', options: ['', '憤怒', '色欲','怠惰','暴食','憂鬱','傲慢','嫉妬','なし'], csvKey: '資源' },
-            { id: 'f_own', label: '発動条件', type: 'select', options: ['', '保有', '共鳴','なし'], csvKey: '保有・共鳴' },
-            { id: 'f_price', label: '価格以下', type: 'number', csvKey: '価格' }
-        ],
-        'mental': [{ id: 'f_name', label: '名称', type: 'text', csvKey: '名称' },{ id: 'f_price', label: '価格以下', type: 'number', csvKey: '価格' }],
-        'ego': [
-            { id: 'f_no', label: '番号 (完全一致)', type: 'text', csvKey: '番号' },
-            { id: 'f_name', label: '名称', type: 'text', csvKey: '名称' },
-            { id: 'f_rank', label: '危険度', type: 'select', options: ['', 'ZAYIN', 'TETH', 'HE', 'WAW', 'ALEPH'], csvKey: '危険度' },
-            { id: 'f_price', label: '価格以下', type: 'number', csvKey: '価格' }
-        ],
-       'status': [{ id: 'f_name', label: '名称', type: 'text', csvKey: '名称' },{ id: 'f_cat', label: '分類', type: 'select', options: ['', 'バフ', 'デバフ', '中立バフ', '蓄積要素', '弾丸', '特殊', '固有バフ', '固有デバフ', '固有中立バフ', '固有弾丸', '固有処理'],csvKey: '分類' }],
-        'item': [{ id: 'f_name', label: '名称', type: 'text', csvKey: '名称' },{ id: 'f_cat', label: '分類', type: 'select', options: ['', '特殊', '回復', '強化'], csvKey: '分類' }],
+const SEARCH_FIELDS = {
+    'identity': [{ id: 'f_no', label: '番号 (完全一致)', type: 'text', csvKey: '番号' }, { id: 'f_name', label: '名称', type: 'text', csvKey: '名称' }],
+    'singularidentity': [{ id: 'f_no', label: '番号 (完全一致)', type: 'text', csvKey: '番号' }, { id: 'f_name', label: '名称', type: 'text', csvKey: '名称' }],
+    'suppassive': [
+        { id: 'f_type', label: '種別', type: 'select', options: ['', '通常', '死亡'], csvKey: '種別' },
+        { id: 'f_res', label: '資源', type: 'select', options: ['', '憤怒', '色欲', '怠惰', '暴食', '憂鬱', '傲慢', '嫉妬', 'なし'], csvKey: '資源' },
+        { id: 'f_own', label: '発動条件', type: 'select', options: ['', '保有', '共鳴', 'なし'], csvKey: '保有・共鳴' },
+        { id: 'f_price', label: '価格以下', type: 'number', csvKey: '価格' }
+    ],
+    'mental': [{ id: 'f_name', label: '名称', type: 'text', csvKey: '名称' }, { id: 'f_price', label: '価格以下', type: 'number', csvKey: '価格' }],
+    'ego': [
+        { id: 'f_no', label: '番号 (完全一致)', type: 'text', csvKey: '番号' },
+        { id: 'f_name', label: '名称', type: 'text', csvKey: '名称' },
+        { id: 'f_rank', label: '危険度', type: 'select', options: ['', 'ZAYIN', 'TETH', 'HE', 'WAW', 'ALEPH'], csvKey: '危険度' },
+        { id: 'f_price', label: '価格以下', type: 'number', csvKey: '価格' }
+    ],
+    'status': [{ id: 'f_name', label: '名称', type: 'text', csvKey: '名称' }, { id: 'f_cat', label: '分類', type: 'select', options: ['', 'バフ', 'デバフ', '中立バフ', '蓄積要素', '弾丸', '特殊', '固有バフ', '固有デバフ', '固有中立バフ', '固有弾丸', '固有処理'], csvKey: '分類' }],
+    'item': [{ id: 'f_name', label: '名称', type: 'text', csvKey: '名称' }, { id: 'f_cat', label: '分類', type: 'select', options: ['', '特殊', '回復', '強化'], csvKey: '分類' }],
     'others': [
         { id: 'f_name', label: '名称', type: 'text', csvKey: '名称' },
         { id: 'f_cat', label: '分類', type: 'select', options: ['', '処理', 'タイミング', '位置関係'], csvKey: '分類' }
     ],
     'strengthening': [
         { id: 'f_name', label: '名称', type: 'text', csvKey: '名称' },
-        { id: 'f_sys', label: '分類', type: 'select', options: ['','通常','特殊'], csvKey: '分類' },
+        { id: 'f_sys', label: '分類', type: 'select', options: ['', '通常', '特殊'], csvKey: '分類' },
         { id: 'f_price', label: '価格', type: 'number', csvKey: '価格' }
     ]
-    };
+};
 
-    const csvSelector = document.getElementById('csvSelector');
-    const searchInput = document.getElementById('searchInput');
-    const searchInputsContainer = document.getElementById('searchInputsContainer');
-    const searchResults = document.getElementById('searchResults');
+const csvSelector = document.getElementById('csvSelector');
+const searchInput = document.getElementById('searchInput');
+const searchInputsContainer = document.getElementById('searchInputsContainer');
+const searchResults = document.getElementById('searchResults');
 
-    let currentData = [];
-    let cache = {};
+let currentData = [];
+let cache = {};
 
-    Object.keys(CSV_FILE_MAP).forEach(k => {
-        const opt = document.createElement('option');
-        opt.value = k; opt.textContent = CSV_FILE_MAP[k].name;
-        csvSelector.appendChild(opt);
-    });
+Object.keys(CSV_FILE_MAP).forEach(k => {
+    const opt = document.createElement('option');
+    opt.value = k; opt.textContent = CSV_FILE_MAP[k].name;
+    csvSelector.appendChild(opt);
+});
 
-    async function loadData() {
-        const key = csvSelector.value;
-        if (!cache[key]) {
-            try {
-                const res = await fetch(CSV_FILE_MAP[key].url);
-                const text = await res.text();
-                const lines = text.trim().split(/\r?\n/);
-                const headers = lines[0].split('\t').map(h => h.trim());
-                cache[key] = lines.slice(1).map(line => {
-                    const cols = line.split('\t');
-                    const obj = {};
-                    headers.forEach((h, i) => {obj[h] = (cols[i] || '').trim();});
-
-                    return obj;
-                });
-            } catch (e) {
-                searchResults.innerHTML = `<p style="color:red">データのロードに失敗しました</p>`;
-                return;
-            }
+async function loadData() {
+    const key = csvSelector.value;
+    if (!cache[key]) {
+        try {
+            const res = await fetch(CSV_FILE_MAP[key].url);
+            const text = await res.text();
+            const lines = text.trim().split(/\r?\n/);
+            const headers = lines[0].split('\t').map(h => h.trim());
+            cache[key] = lines.slice(1).map(line => {
+                const cols = line.split('\t');
+                const obj = {};
+                headers.forEach((h, i) => { obj[h] = (cols[i] || '').trim(); });
+                return obj;
+            });
+        } catch (e) {
+            searchResults.innerHTML = `<p style="color:red">データのロードに失敗しました</p>`;
+            return;
         }
-        currentData = cache[key];
-        renderFields(key);
-        performSearch();
-
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth' // スルッと戻る（即座に戻したい場合は 'auto'）
-        });
     }
+    currentData = cache[key];
+    renderFields(key);
+    performSearch();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
-  function renderFields(key) {
+function renderFields(key) {
     searchInputsContainer.innerHTML = '';
-
     SEARCH_FIELDS[key].forEach(f => {
         const div = document.createElement('div');
         div.className = 'search-input-group';
-
         const label = document.createElement('label');
         label.textContent = f.label;
-
-        const input = document.createElement(
-            f.type === 'select' ? 'select' : 'input'
-        );
-
+        const input = document.createElement(f.type === 'select' ? 'select' : 'input');
         if (f.type !== 'select') input.type = f.type;
-
         if (f.type === 'select') {
             f.options.forEach(o => {
                 const opt = document.createElement('option');
@@ -613,287 +599,183 @@ function toggleFavoriteFilter(){
                 input.appendChild(opt);
             });
         }
-
         input.id = f.id;
         input.addEventListener('input', performSearch);
-
         div.appendChild(label);
         div.appendChild(input);
         searchInputsContainer.appendChild(div);
     });
 }
 
-    function performSearch() {
-        const query = searchInput.value.toLowerCase();
-        const key = csvSelector.value;
-        const fields = SEARCH_FIELDS[key];
-
-        const filtered = currentData.filter(item => {
-            const keywordMatch = !query || Object.values(item).some(v => String(v).toLowerCase().includes(query));
-            
-            const dynamicMatch = fields.every(f => {
-                const el = document.getElementById(f.id);
-                if (!el || el.value === '') return true;
-                const val = item[f.csvKey];
-                
-                if (f.id === 'f_no') return String(val) === String(el.value);
-                if (f.type === 'number') {if (val === '') return false;return Number(val) <= Number(el.value);}
-                return String(val).toLowerCase().includes(el.value.toLowerCase());
-            });
-            
-            return keywordMatch && dynamicMatch;
+function performSearch() {
+    const query = searchInput.value.toLowerCase();
+    const key = csvSelector.value;
+    const fields = SEARCH_FIELDS[key];
+    const filtered = currentData.filter(item => {
+        const keywordMatch = !query || Object.values(item).some(v => String(v).toLowerCase().includes(query));
+        const dynamicMatch = fields.every(f => {
+            const el = document.getElementById(f.id);
+            if (!el || el.value === '') return true;
+            const val = item[f.csvKey];
+            if (f.id === 'f_no') return String(val) === String(el.value);
+            if (f.type === 'number') { if (val === '') return false; return Number(val) <= Number(el.value); }
+            return String(val).toLowerCase().includes(el.value.toLowerCase());
         });
+        return keywordMatch && dynamicMatch;
+    });
+    renderResults(filtered);
+}
 
-        renderResults(filtered);
-    }
-
-    function renderResults(data) {
-
+function renderResults(data) {
     if (data.length === 0) {
-        searchResults.innerHTML =
-          '<p style="text-align:center; color:var(--muted);">該当なし</p>';
+        searchResults.innerHTML = '<p style="text-align:center; color:var(--muted);">該当なし</p>';
         return;
     }
-
     const key = csvSelector.value;
     const favs = getFavorites();
 
     searchResults.innerHTML = data.map((item, idx) => {
+        // IDに特殊文字が入らないよう安全な形式にする
+        const safeId = `item-${key}-${idx}`;
+        const favId = `${key}_${idx}_${item['番号'] || item['名称'] || 'id'}`;
 
-        const id = `${key}_${idx}_${item['番号'] || item['名称'] || item['分類'] || 'item'}`;
+        if (showOnlyFavorites && !favs.includes(favId)) return '';
 
-
-        if (showOnlyFavorites && !favs.includes(id)) {
-            return '';
-        }
-
-        /* ========= 人格 / 特異人格 ========= */
+        let contentHTML = '';
         if (key === 'identity' || key === 'singularidentity') {
-
             const fixedOrderHTML = `
-<div class="field"><span class="field-label">番号</span><span class="field-value">${item['番号']||''}</span></div>
-<div class="field"><span class="field-label">名称</span><span class="field-value">${item['名称']||''}</span></div>
-
-<div class="field">
-<span class="field-label">能力値</span>
-<span class="field-value">
-HP:${item['HP']||''}　
-SAN:${item['SAN']||''}　
-速度:${item['速度']||''}　
-弾丸:${item['弾丸']||''}
-</span>
-</div>
-
-<div class="field">
-<span class="field-label">耐性</span>
-<span class="field-value">
-斬撃:${item['斬撃']||''}　
-打撃:${item['打撃']||''}　
-貫通:${item['貫通']||''}
-</span>
-</div>
-`;
-
-            const excludedKeys =
-            ['番号','名称','HP','SAN','速度','弾丸','斬撃','打撃','貫通'];
-
+                <div class="field"><span class="field-label">番号</span><span class="field-value">${item['番号'] || ''}</span></div>
+                <div class="field"><span class="field-label">名称</span><span class="field-value">${item['名称'] || ''}</span></div>
+                <div class="field"><span class="field-label">能力値</span><span class="field-value">HP:${item['HP'] || ''}　SAN:${item['SAN'] || ''}　速度:${item['速度'] || ''}　弾丸:${item['弾丸'] || ''}</span></div>
+                <div class="field"><span class="field-label">耐性</span><span class="field-value">斬撃:${item['斬撃'] || ''}　打撃:${item['打撃'] || ''}　貫通:${item['貫通'] || ''}</span></div>
+            `;
+            const excludedKeys = ['番号', '名称', 'HP', 'SAN', '速度', '弾丸', '斬撃', '打撃', '貫通'];
             const restHTML = Object.entries(item)
-              .filter(([k,v]) => v && !excludedKeys.includes(k))
-              .map(([k,v]) =>
-                `<div class="field"><span class="field-label">${k}</span><span class="field-value">${v}</span></div>`
-              ).join('');
-
-            return `
-<div class="result-item" id="${id}">
-    <button class="fav-btn" onclick="toggleFavorite('${id}')"></button>
-    <button class="copy-btn" onclick="copyDisplayedContent('${id}')">コピー</button>
-    <div class="item-body">
-        ${fixedOrderHTML}
-        ${restHTML}
-    </div>
-</div>`;
+                .filter(([k, v]) => v && !excludedKeys.includes(k))
+                .map(([k, v]) => `<div class="field"><span class="field-label">${k}</span><span class="field-value">${v}</span></div>`).join('');
+            contentHTML = fixedOrderHTML + restHTML;
+        } else {
+            contentHTML = Object.entries(item)
+                .filter(([k, v]) => v)
+                .map(([k, v]) => `<div class="field"><span class="field-label">${k}</span><span class="field-value">${v}</span></div>`).join('');
         }
-
-        /* ========= その他 ========= */
-
-        const normalHTML = Object.entries(item)
-          .filter(([k,v]) => v)
-          .map(([k,v]) =>
-            `<div class="field"><span class="field-label">${k}</span><span class="field-value">${v}</span></div>`
-          ).join('');
 
         return `
-<div class="result-item" id="${id}">
-    <button class="fav-btn" onclick="toggleFavorite('${id}')"></button>
-    <button class="copy-btn" onclick="copyDisplayedContent('${id}')">コピー</button>
-    <div class="item-body">
-        ${normalHTML}
-    </div>
-</div>`;
+            <div class="result-item" id="${safeId}">
+                <button class="fav-btn" data-favid="${favId}" onclick="toggleFavorite('${favId}')"></button>
+                <button class="copy-btn" onclick="copyDisplayedContent(this)">コピー</button>
+                <div class="item-body">${contentHTML}</div>
+            </div>`;
     }).join('');
-
     updateFavoriteIcons();
 }
 
+async function copyDisplayedContent(btn) {
+    // ボタン自身から親要素を辿ることで、IDの不備に左右されず要素を特定
+    const resultItem = btn.closest('.result-item');
+    const itemBody = resultItem ? resultItem.querySelector('.item-body') : null;
+    
+    if (!itemBody) {
+        console.error("コピー対象が見つかりませんでした");
+        return;
+    }
 
+    const fields = itemBody.querySelectorAll('.field');
+    const key = csvSelector.value;
+    const data = {};
 
- async function copyDisplayedContent(id) {
-        const itemBody = document.querySelector(`#${id} .item-body`);
-        const btn = document.querySelector(`#${id} .copy-btn`);
-        const fields = itemBody.querySelectorAll('.field');
-        
-        let textToCopy = "";
-        const key = csvSelector.value;
+    fields.forEach(f => {
+        const labelEl = f.querySelector('.field-label');
+        const valueEl = f.querySelector('.field-value');
+        if (!labelEl || !valueEl) return;
 
-        // データをオブジェクトに格納
-        const data = {};
-        fields.forEach(f => {
-        const label = f.querySelector('.field-label').innerText.trim();
-        const value = f.querySelector('.field-value').innerText.trim();
+        const label = labelEl.innerText.trim();
+        const value = valueEl.innerText.trim();
 
-        // 能力値を分解
-        if (label === '能力値') {
+        if (label === '能力値' || label === '耐性') {
             value.split(/　|\s+/).forEach(part => {
                 const [k, v] = part.split(':');
                 if (k && v) data[k.trim()] = v.trim();
             });
             return;
         }
-
-        // 耐性を分解
-        if (label === '耐性') {
-            value.split(/　|\s+/).forEach(part => {
-                const [k, v] = part.split(':');
-                if (k && v) data[k.trim()] = v.trim();
-            });
-            return;
-        }
-
         data[label] = value;
     });
 
-        if (key === 'identity' || key === 'singularidentity') {
-
-        textToCopy =
-`名称:${data['名称'] || ''}
-HP:${data['HP'] || ''}　SAN:${data['SAN'] || ''}　速度:${data['速度'] || ''}
-斬撃:${data['斬撃'] || ''}　貫通:${data['貫通'] || ''}　打撃:${data['打撃'] || ''}　弾丸:${data['弾丸'] || ''}
-
-${data['パッシブ名'] || ''}　${data['発動条件'] || ''}
-${data['効果'] || ''}
-
-戦術0名称:${data['戦術0名称'] || ''}　戦術0効果:${data['戦術0効果'] || ''}
-戦術1名称:${data['戦術1名称'] || ''}　戦術1効果:${data['戦術1効果'] || ''}
-戦術2名称:${data['戦術2名称'] || ''}　戦術2効果:${data['戦術2効果'] || ''}
-戦術3名称:${data['戦術3名称'] || ''}　戦術3効果:${data['戦術3効果'] || ''}
-戦術4名称:${data['戦術4名称'] || ''}　戦術4効果:${data['戦術4効果'] || ''}
-
-強化スキル:${data['強化スキル'] || ''}
-固有:${data['固有'] || ''}`;
-        } else if (key === 'mental') {
-            // 精神用カスタムフォーマット
-            textToCopy = 
-                `名称:${data['名称'] || ''}\n` +
-                `常時発動:${data['常時発動'] || ''}\n` +
-                `士気低下効果:${data['士気低下効果'] || ''}\n` +
-                `混乱効果:${data['混乱効果'] || ''}`;
-
-
-        } else if (key === 'status') {
-            // 状態異常用カスタムフォーマット
-            textToCopy = 
-                `【${data['名称'] || ''}】${data['分類'] || ''}　最大数:${data['最大数'] || ''}\n` +
-                `効果:${data['効果'] || ''}`;
-        
-        
-        
-        } else if (key === 'suppassive') {
-            // サポートパッシブ用
-            const name = data['名称'] || '';
-            const res = data['資源'] || '';
-            const cond = data['保有・共鳴'] || '';
-            const effect = data['効果'] || '';
-            textToCopy = `名称:${name}\n発動条件:${res}${cond}\n効果:${effect}`;
-
-        } else if (key === 'ego') {
-            // E.G.O用
-            const rank = data['危険度'] || '';
-            const name = data['名称'] || '';
-            const res = data['資源'] || '';
-            const pName = data['E.G.O パッシブ名'] || '';
-            const cond = data['発動条件'] || '';
-            const effect = data['効果'] || '';
-            const aAttr = data['覚醒スキル属性'] || '';
-            const aEffect = data['覚醒スキル効果'] || '';
-            const eAttr = data['侵蝕スキル属性'] || '';
-            const eEffect = data['侵蝕スキル'] || '';
-            const unique = data['固有'] || '';
-
-            textToCopy = `【${rank}】名称:${name}\n資源:${res}\nパッシブ名:${pName}\n発動条件:${cond}\n効果:${effect}\n\n覚醒スキル属性:${aAttr}\n覚醒スキル効果:${aEffect}\n\n侵蝕スキル属性:${eAttr}\n侵蝕スキル:${eEffect}\n\n固有:${unique}`;
-
-        } else {
-            // その他のカテゴリ
-            textToCopy = Array.from(fields).map(f => {
-                const label = f.querySelector('.field-label').innerText;
-                const value = f.querySelector('.field-value').innerText;
-                return `${label}: ${value}`;
-            }).join('\n');
-        }
-
-        try {
-    await navigator.clipboard.writeText(textToCopy);
-
-    btn.innerText = '完了';
-    btn.classList.add('copied');   // ← 緑にする
-
-    setTimeout(() => {
-        btn.innerText = 'コピー';
-        btn.classList.remove('copied'); // ← 赤に戻す
-    }, 800);
-
-} catch (err) {
-    alert('コピーに失敗しました');
-}
+    let textToCopy = "";
+    if (key === 'identity' || key === 'singularidentity') {
+        textToCopy = `名称:${data['名称'] || ''}\nHP:${data['HP'] || ''}　SAN:${data['SAN'] || ''}　速度:${data['速度'] || ''}\n斬撃:${data['斬撃'] || ''}　貫通:${data['貫通'] || ''}　打撃:${data['打撃'] || ''}　弾丸:${data['弾丸'] || ''}\n\n${data['パッシブ名'] || ''}　${data['発動条件'] || ''}\n${data['効果'] || ''}\n\n戦術0:${data['戦術0名称'] || ''}　${data['戦術0効果'] || ''}\n戦術1:${data['戦術1名称'] || ''}　${data['戦術1効果'] || ''}\n戦術2:${data['戦術2名称'] || ''}　${data['戦術2効果'] || ''}\n戦術3:${data['戦術3名称'] || ''}　${data['戦術3効果'] || ''}\n戦術4:${data['戦術4名称'] || ''}　${data['戦術4効果'] || ''}\n\n強化スキル:${data['強化スキル'] || ''}\n固有:${data['固有'] || ''}`;
+    } else if (key === 'mental') {
+        textToCopy = `名称:${data['名称'] || ''}\n常時発動:${data['常時発動'] || ''}\n士気低下効果:${data['士気低下効果'] || ''}\n混乱効果:${data['混乱効果'] || ''}`;
+    } else if (key === 'status') {
+        textToCopy = `【${data['名称'] || ''}】${data['分類'] || ''}　最大数:${data['最大数'] || ''}\n効果:${data['効果'] || ''}`;
+    } else if (key === 'suppassive') {
+        textToCopy = `名称:${data['名称'] || ''}\n発動条件:${(data['資源'] || '')}${(data['保有・共鳴'] || '')}\n効果:${data['効果'] || ''}`;
+    } else if (key === 'ego') {
+        textToCopy = `【${data['危険度'] || ''}】名称:${data['名称'] || ''}\n資源:${data['資源'] || ''}\nパッシブ名:${data['E.G.O パッシブ名'] || ''}\n発動条件:${data['発動条件'] || ''}\n効果:${data['効果'] || ''}\n\n覚醒属性:${data['覚醒スキル属性'] || ''}\n覚醒効果:${data['覚醒スキル効果'] || ''}\n\n侵蝕属性:${data['侵蝕スキル属性'] || ''}\n侵蝕効果:${data['侵蝕スキル'] || ''}\n\n固有:${data['固有'] || ''}`;
+    } else {
+        textToCopy = Array.from(fields).map(f => `${f.querySelector('.field-label').innerText}: ${f.querySelector('.field-value').innerText}`).join('\n');
     }
-function getFavorites(){
+
+    try {
+        // クリップボードAPI(HTTPS推奨)
+        if (navigator.clipboard && window.isSecureContext) {
+            await navigator.clipboard.writeText(textToCopy);
+        } else {
+            // ローカル/HTTP環境用フォールバック
+            const textArea = document.createElement("textarea");
+            textArea.value = textToCopy;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+        }
+        btn.innerText = '完了';
+        btn.classList.add('copied');
+        setTimeout(() => {
+            btn.innerText = 'コピー';
+            btn.classList.remove('copied');
+        }, 800);
+    } catch (err) {
+        console.error("Copy failed:", err);
+        alert('コピーに失敗しました');
+    }
+}
+
+function getFavorites() {
     return JSON.parse(localStorage.getItem("favorites") || "[]");
 }
 
-function saveFavorites(arr){
+function saveFavorites(arr) {
     localStorage.setItem("favorites", JSON.stringify(arr));
 }
 
-function toggleFavorite(id){
+function toggleFavorite(id) {
     let favs = getFavorites();
-
-    if(favs.includes(id)){
-        favs = favs.filter(f=>f!==id);
-    }else{
+    if (favs.includes(id)) {
+        favs = favs.filter(f => f !== id);
+    } else {
         favs.push(id);
     }
-
     saveFavorites(favs);
-    updateFavoriteIcons();   // ← これを追加
+    updateFavoriteIcons();
 }
 
-
-function updateFavoriteIcons(){
+function updateFavoriteIcons() {
     const favs = getFavorites();
-
-    document.querySelectorAll(".fav-btn").forEach(btn=>{
-        const id = btn.getAttribute("onclick")
-            .match(/'(.*)'/)[1];
-
-        if(favs.includes(id)){
+    document.querySelectorAll(".fav-btn").forEach(btn => {
+        const id = btn.dataset.favid;
+        if (favs.includes(id)) {
             btn.classList.add("active");
-        }else{
+        } else {
             btn.classList.remove("active");
         }
     });
 }
-    csvSelector.onchange = loadData;
-    searchInput.oninput = performSearch;
-    window.onload = loadData;
+
+csvSelector.onchange = loadData;
+searchInput.oninput = performSearch;
+window.onload = loadData;
 </script>
 
 </body>
