@@ -632,14 +632,36 @@ function renderResults(data) {
         return;
     }
     const key = csvSelector.value;
-    const favs = getFavorites(); // ここで取得
+    const favs = getFavorites();
 
     const html = data.map((item, idx) => {
-        const uniqueKey = item['番号'] || item['名称'] || idx;
+        // 【重要】インデックス(idx)を使わず、名称や番号で固定のIDを作る
+        const uniqueKey = item['番号'] || item['名称'] || `id-${idx}`;
         const favId = `${key}_${uniqueKey}`;
         const safeId = `item-${key}-${idx}`;
 
+        // 「栞のみ表示」モードの時、栞に含まれていなければスキップ
         if (showOnlyFavorites && !favs.includes(favId)) return '';
+
+        // --- ここから contentHTML の生成処理 (元のロジックを復元) ---
+        let contentHTML = '';
+        if (key === 'identity' || key === 'singularidentity') {
+            const fixedOrderHTML = `
+                <div class="field"><span class="field-label">番号</span><span class="field-value">${item['番号'] || ''}</span></div>
+                <div class="field"><span class="field-label">名称</span><span class="field-value">${item['名称'] || ''}</span></div>
+                <div class="field"><span class="field-label">能力値</span><span class="field-value">HP:${item['HP'] || ''}　SAN:${item['SAN'] || ''}　速度:${item['速度'] || ''}　弾丸:${item['弾丸'] || ''}</span></div>
+                <div class="field"><span class="field-label">耐性</span><span class="field-value">斬撃:${item['斬撃'] || ''}　打撃:${item['打撃'] || ''}　貫通:${item['貫通'] || ''}</span></div>
+            `;
+            const excludedKeys = ['番号', '名称', 'HP', 'SAN', '速度', '弾丸', '斬撃', '打撃', '貫通'];
+            const restHTML = Object.entries(item)
+                .filter(([k, v]) => v && !excludedKeys.includes(k))
+                .map(([k, v]) => `<div class="field"><span class="field-label">${k}</span><span class="field-value">${v}</span></div>`).join('');
+            contentHTML = fixedOrderHTML + restHTML;
+        } else {
+            contentHTML = Object.entries(item)
+                .filter(([k, v]) => v)
+                .map(([k, v]) => `<div class="field"><span class="field-label">${k}</span><span class="field-value">${v}</span></div>`).join('');
+        }
 
         const activeClass = favs.includes(favId) ? 'active' : '';
 
@@ -656,8 +678,6 @@ function renderResults(data) {
     } else {
         searchResults.innerHTML = html;
     }
-
-    updateFavoriteIcons();
 }
 
 async function copyDisplayedContent(btn) {
