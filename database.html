@@ -738,74 +738,142 @@ SAN:${item['SAN']||''}　
 
 
  async function copyDisplayedContent(id) {
-    // 1. ボタン要素を直接取得（色の変更用）
-    const btn = document.querySelector(`#${id} .copy-btn`);
-    // 2. その親要素(result-item)の中にある item-body を探す
-    const itemBody = document.querySelector(`#${id} .item-body`);
-    
-    if (!itemBody) {
-        console.error("Copy target not found:", id);
-        return;
-    }
+        const itemBody = document.querySelector(`#${id} .item-body`);
+        const btn = document.querySelector(`#${id} .copy-btn`);
+        const fields = itemBody.querySelectorAll('.field');
+        
+        let textToCopy = "";
+        const key = csvSelector.value;
 
-    const fields = itemBody.querySelectorAll('.field');
-    let textToCopy = "";
-    const key = csvSelector.value;
-    const data = {};
+        // データをオブジェクトに格納
+        const data = {};
+        fields.forEach(f => {
+        const label = f.querySelector('.field-label').innerText.trim();
+        const value = f.querySelector('.field-value').innerText.trim();
 
-    // データの抽出処理
-    fields.forEach(f => {
-        const labelEl = f.querySelector('.field-label');
-        const valueEl = f.querySelector('.field-value');
-        if (!labelEl || !valueEl) return;
-
-        const label = labelEl.innerText.trim();
-        const value = valueEl.innerText.trim();
-
-        if (label === '能力値' || label === '耐性') {
+        // 能力値を分解
+        if (label === '能力値') {
             value.split(/　|\s+/).forEach(part => {
                 const [k, v] = part.split(':');
                 if (k && v) data[k.trim()] = v.trim();
             });
             return;
         }
+
+        // 耐性を分解
+        if (label === '耐性') {
+            value.split(/　|\s+/).forEach(part => {
+                const [k, v] = part.split(':');
+                if (k && v) data[k.trim()] = v.trim();
+            });
+            return;
+        }
+
         data[label] = value;
     });
 
-    // --- 各カテゴリごとのテキスト整形ロジック (既存のものを維持) ---
-    if (key === 'identity' || key === 'singularidentity') {
-        textToCopy = `名称:${data['名称'] || ''}\nHP:${data['HP'] || ''}　SAN:${data['SAN'] || ''}　速度:${data['速度'] || ''}\n斬撃:${data['斬撃'] || ''}　貫通:${data['貫通'] || ''}　打撃:${data['打撃'] || ''}　弾丸:${data['弾丸'] || ''}\n\n${data['パッシブ名'] || ''}　${data['発動条件'] || ''}\n${data['効果'] || ''}\n\n戦術0:${data['戦術0名称'] || ''} ${data['戦術0効果'] || ''}\n戦術1:${data['戦術1名称'] || ''} ${data['戦術1効果'] || ''}\n戦術2:${data['戦術2名称'] || ''} ${data['戦術2効果'] || ''}\n戦術3:${data['戦術3名称'] || ''} ${data['戦術3効果'] || ''}\n戦術4:${data['戦術4名称'] || ''} ${data['戦術4効果'] || ''}`;
-    } else {
-        textToCopy = Object.entries(data).map(([k, v]) => `${k}: ${v}`).join('\n');
-    }
+        if (key === 'identity' || key === 'singularidentity') {
 
-    // 3. クリップボードへの書き込み（フォールバック付き）
-    try {
-        if (navigator.clipboard && window.isSecureContext) {
-            await navigator.clipboard.writeText(textToCopy);
+        textToCopy =
+`名称:${data['名称'] || ''}
+HP:${data['HP'] || ''}　SAN:${data['SAN'] || ''}　速度:${data['速度'] || ''}
+斬撃:${data['斬撃'] || ''}　貫通:${data['貫通'] || ''}　打撃:${data['打撃'] || ''}　弾丸:${data['弾丸'] || ''}
+
+${data['パッシブ名'] || ''}　${data['発動条件'] || ''}
+${data['効果'] || ''}
+
+戦術0名称:${data['戦術0名称'] || ''}　戦術0効果:${data['戦術0効果'] || ''}
+戦術1名称:${data['戦術1名称'] || ''}　戦術1効果:${data['戦術1効果'] || ''}
+戦術2名称:${data['戦術2名称'] || ''}　戦術2効果:${data['戦術2効果'] || ''}
+戦術3名称:${data['戦術3名称'] || ''}　戦術3効果:${data['戦術3効果'] || ''}
+戦術4名称:${data['戦術4名称'] || ''}　戦術4効果:${data['戦術4効果'] || ''}
+
+強化スキル:${data['強化スキル'] || ''}
+固有:${data['固有'] || ''}`;
+        } else if (key === 'mental') {
+            // 精神用カスタムフォーマット
+            textToCopy = 
+                `名称:${data['名称'] || ''}\n` +
+                `常時発動:${data['常時発動'] || ''}\n` +
+                `士気低下効果:${data['士気低下効果'] || ''}\n` +
+                `混乱効果:${data['混乱効果'] || ''}`;
+
+
+        } else if (key === 'status') {
+            // 状態異常用カスタムフォーマット
+            textToCopy = 
+                `【${data['名称'] || ''}】${data['分類'] || ''}　最大数:${data['最大数'] || ''}\n` +
+                `効果:${data['効果'] || ''}`;
+        
+        
+        
+        } else if (key === 'suppassive') {
+            // サポートパッシブ用
+            const name = data['名称'] || '';
+            const res = data['資源'] || '';
+            const cond = data['保有・共鳴'] || '';
+            const effect = data['効果'] || '';
+            textToCopy = `名称:${name}\n発動条件:${res}${cond}\n効果:${effect}`;
+
+        } else if (key === 'ego') {
+            // E.G.O用
+            const rank = data['危険度'] || '';
+            const name = data['名称'] || '';
+            const res = data['資源'] || '';
+            const pName = data['E.G.O パッシブ名'] || '';
+            const cond = data['発動条件'] || '';
+            const effect = data['効果'] || '';
+            const aAttr = data['覚醒スキル属性'] || '';
+            const aEffect = data['覚醒スキル効果'] || '';
+            const eAttr = data['侵蝕スキル属性'] || '';
+            const eEffect = data['侵蝕スキル'] || '';
+            const unique = data['固有'] || '';
+
+            textToCopy = `【${rank}】名称:${name}\n資源:${res}\nパッシブ名:${pName}\n発動条件:${cond}\n効果:${effect}\n\n覚醒スキル属性:${aAttr}\n覚醒スキル効果:${aEffect}\n\n侵蝕スキル属性:${eAttr}\n侵蝕スキル:${eEffect}\n\n固有:${unique}`;
+
         } else {
-            // HTTPSでない環境用の古いコピー方法
-            const textArea = document.createElement("textarea");
-            textArea.value = textToCopy;
-            document.body.appendChild(textArea);
-            textArea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textArea);
+            // その他のカテゴリ
+            textToCopy = Array.from(fields).map(f => {
+                const label = f.querySelector('.field-label').innerText;
+                const value = f.querySelector('.field-value').innerText;
+                return `${label}: ${value}`;
+            }).join('\n');
         }
 
-        // 成功時の演出
-        if (btn) {
-            btn.innerText = '完了';
-            btn.classList.add('copied');
-            setTimeout(() => {
-                btn.innerText = 'コピー';
-                btn.classList.remove('copied');
-            }, 800);
-        }
-    } catch (err) {
-        console.error('Copy failed:', err);
-        alert('コピーに失敗しました。ブラウザの権限を確認してください。');
+        try {
+    await navigator.clipboard.writeText(textToCopy);
+
+    btn.innerText = '完了';
+    btn.classList.add('copied');   // ← 緑にする
+
+    setTimeout(() => {
+        btn.innerText = 'コピー';
+        btn.classList.remove('copied'); // ← 赤に戻す
+    }, 800);
+
+} catch (err) {
+    alert('コピーに失敗しました');
+}
     }
+function getFavorites(){
+    return JSON.parse(localStorage.getItem("favorites") || "[]");
+}
+
+function saveFavorites(arr){
+    localStorage.setItem("favorites", JSON.stringify(arr));
+}
+
+function toggleFavorite(id){
+    let favs = getFavorites();
+
+    if(favs.includes(id)){
+        favs = favs.filter(f=>f!==id);
+    }else{
+        favs.push(id);
+    }
+
+    saveFavorites(favs);
+    updateFavoriteIcons();   // ← これを追加
 }
 
 
