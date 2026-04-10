@@ -89,6 +89,9 @@ li{
   background:#1a140e;
   padding:15px;
   border-left:1px solid #6b4b2a;
+
+  display: flex;
+  flex-direction: column;
 }
 .cart-item{
   display:flex;
@@ -151,6 +154,22 @@ form button{
 form button:hover{
     background:#9a7740;
 }
+#cartList{
+  flex: 1;               /* cart内で余った高さを取る */
+  overflow-y: auto;      /* 縦スクロールを有効化 */
+  min-height: 0;         /* flexスクロールで必須 */
+}
+#total{
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #6b4b2a;
+  flex-shrink: 0;
+}
+
+.cart button{
+  flex-shrink: 0;
+}
+
 </style>
 </head>
 
