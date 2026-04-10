@@ -2,229 +2,266 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>購買｜工事中</title>
+<title>購買ツール</title>
 
 <style>
 body{
   margin:0;
-  background:#0f0c09;
-  color:#d6b873;
+  background:#0a0705;
   font-family:serif;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  height:100vh;
-  overflow:hidden;
-}
-
-/* =========================
-   テープ揺れアニメーション
-========================= */
-@keyframes sway{
-  0%   { transform: rotate(var(--angle)) translateX(0px); }
-  50%  { transform: rotate(calc(var(--angle) + 1deg)) translateX(5px); }
-  100% { transform: rotate(var(--angle)) translateX(0px); }
-}
-
-.tape{
-  position:absolute;
-  width:250%;
-  height:60px;
-  left:-60%;
-  background: repeating-linear-gradient(
-    45deg,
-    rgba(255,220,0,0.18) 0px,
-    rgba(255,220,0,0.18) 40px,
-    rgba(0,0,0,0.18) 40px,
-    rgba(0,0,0,0.18) 80px
-  );
-  animation: sway 6s ease-in-out infinite;
-}
-
-.tape::after{
-  content:" 立入禁止  DO NOT ENTER  立入禁止  DO NOT ENTER ";
-  position:absolute;
-  width:100%;
-  top:18px;
-  text-align:center;
-  font-size:18px;
-  letter-spacing:0.3em;
-  color:rgba(0,0,0,0.45);
-}
-
-.t1{ top:10%; --angle:-12deg; }
-.t2{ top:35%; --angle:8deg; }
-.t3{ top:65%; --angle:-6deg; }
-.t4{ top:85%; --angle:14deg; }
-
-/* =========================
-   リアル扉
-========================= */
-.door{
-  position:relative;
-  width:280px;
-  height:460px;
-  background:
-    linear-gradient(180deg,#3b2a1a,#2a1b10),
-    repeating-linear-gradient(
-      90deg,
-      rgba(255,255,255,0.03) 0px,
-      rgba(255,255,255,0.03) 4px,
-      transparent 4px,
-      transparent 8px
-    );
-  border:6px solid #5a3b20;
-  box-shadow:
-    inset 0 0 40px rgba(0,0,0,0.8),
-    0 0 50px rgba(0,0,0,0.9);
-}
-
-/* 木目 */
-.door::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:
-    repeating-linear-gradient(
-      0deg,
-      rgba(255,255,255,0.02) 0px,
-      rgba(255,255,255,0.02) 3px,
-      transparent 3px,
-      transparent 6px
-    );
-  mix-blend-mode:overlay;
-}
-
-/* ドアノブ */
-.knob{
-  position:absolute;
-  width:22px;
-  height:22px;
-  background:radial-gradient(circle at 30% 30%,#e6d39c,#8b6a2f);
-  border-radius:50%;
-  right:28px;
-  top:220px;
-  box-shadow:0 0 10px rgba(0,0,0,0.6);
-}
-
-/* =========================
-   ドアノブ直下の南京錠
-========================= */
-
-@keyframes lockSway{
-  0%   { transform: rotate(-1deg); }
-  50%  { transform: rotate(1deg); }
-  100% { transform: rotate(-1deg); }
-}
-
-.lock{
-  position:absolute;
-  width:70px;
-  height:85px;
-
-  /* ★ ノブの真下へ移動 */
-  right:5px;
-  top:245px;
-
-  border-radius:16px;
-
-  background:
-    linear-gradient(180deg,#f0e2a6 0%, #c9a84d 40%, #8a6a25 100%);
-
-  box-shadow:
-    inset 0 -12px 18px rgba(0,0,0,0.6),
-    inset 0 4px 8px rgba(255,255,255,0.3),
-    0 10px 18px rgba(0,0,0,0.8);
-
-  animation: lockSway 3.5s ease-in-out infinite;
-  transform-origin: top center; /* ★ 上からぶら下がる感じ */
-}
-
-/* 弓部分 */
-.lock::before{
-  content:"";
-  position:absolute;
-  width:44px;
-  height:44px;
-  border:10px solid #d8c27a;
-  border-bottom:none;
-  border-radius:50px 50px 0 0;
-  top:-42px;
-  left:50%;
-  transform:translateX(-50%);
-  box-shadow:
-    inset 0 4px 6px rgba(255,255,255,0.3),
-    0 4px 8px rgba(0,0,0,0.6);
-}
-
-/* 鍵穴 */
-.lock::after{
-  content:"";
-  position:absolute;
-  width:14px;
-  height:24px;
-  background:#2a1b10;
-  border-radius:7px;
-  top:35px;
-  left:50%;
-  transform:translateX(-50%);
-  box-shadow: inset 0 4px 6px rgba(0,0,0,0.8);
-}
-
-/* =========================
-   ボタン（扉上部）
-========================= */
-.back-btn{
-  position:absolute;
-  top:15px;
-  left:50%;
-  transform:translateX(-50%);
-  padding:6px 18px;
-  border:1px solid #6b4b2a;
-  text-decoration:none;
   color:#d6b873;
-  background:rgba(0,0,0,0.4);
 }
-
-.back-btn:hover{
-  background:#6b4b2a;
-  color:#fff;
+.container{
+  display:grid;
+  grid-template-columns:220px 1fr 280px;
+  height:100vh;
 }
-
-/* メッセージ */
-.message{
+.sidebar{
+  background:#1a120a;
+  padding:15px;
+  border-right:1px solid #6b4b2a;
+}
+.category{
+  padding:10px;
+  border:1px solid #6b4b2a;
+  margin-bottom:8px;
+  cursor:pointer;
+}
+.category:hover{
+  background:#3b2a1a;
+}
+.main{
+  padding:15px;
+  overflow-y:auto;
+}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+}
+.item{
+  background:#f4ecd8;
+  color:#000;
+  border:2px solid #8a6a3c;
+  padding:10px;
+  cursor:pointer;
+  position:relative;
+}
+.item.selected{
+  outline:3px solid gold;
+}
+.tooltip{
   position:absolute;
-  bottom:-130px;
-  width:100%;
-  text-align:center;
+  bottom:100%;
+  left:0;
+  background:#000;
+  color:#fff;
+  padding:5px;
+  font-size:12px;
+  display:none;
 }
-
-.message h1{
-  font-size:1.7rem;
-  letter-spacing:0.25em;
+.item:hover .tooltip{
+  display:block;
+}
+.cart{
+  background:#1a140e;
+  padding:15px;
+  border-left:1px solid #6b4b2a;
+}
+.cart-item{
+  display:flex;
+  justify-content:space-between;
+  border-bottom:1px solid #6b4b2a;
+  padding:5px 0;
+}
+button{
+  width:100%;
+  margin-top:10px;
+  padding:8px;
+  background:#3b2a1a;
+  color:#d6b873;
+  border:1px solid #6b4b2a;
+  cursor:pointer;
 }
 </style>
 </head>
 
 <body>
+<div class="container">
 
-<div class="tape t1"></div>
-<div class="tape t2"></div>
-<div class="tape t3"></div>
-<div class="tape t4"></div>
-
-<div class="door">
-  <a href="index.html" class="back-btn">受付へ戻る</a>
-
-  <div class="knob"></div>
-  <div class="lock"></div>
-
-  <div class="message">
-    <h1>現在工事中です</h1>
-    <p>司書以外立入禁止</p>
-  </div>
+<!-- 左 -->
+<div class="sidebar">
+  <h3>分類</h3>
+  <div id="categoryList"></div>
+  <button onclick="resetAll()">全リセット</button>
 </div>
 
-</body>
+<!-- 中央 -->
+<div class="main">
+  <div class="grid" id="shop"></div>
+</div>
 
+<!-- 右 -->
+<div class="cart">
+  <h3>選択</h3>
+  <div id="cartList"></div>
+  <div>合計：<span id="total"></span></div>
+  <button onclick="copyResult()">コピー</button>
+</div>
+
+</div>
+
+<script>
+/* ===== 設定 ===== */
+const TYPE_ORDER = [
+  "identity",
+  "ego",
+  "suppassive",
+  "mental",
+  "strengthening",
+  "item"
+];
+
+const TYPE_LABEL = {
+  identity: "人格",
+  ego: "E.G.O",
+  suppassive: "サポートパッシブ",
+  mental: "精神",
+  strengthening: "身体強化",
+  item: "アイテム",
+  all: "すべて"
+};
+
+let ITEM_DB = [];
+let cart = [];
+let currentCategory = "all";
+
+/* ===== 初期化 ===== */
+async function init(){
+  const res = await fetch("./data/shop.tsv");
+  const text = await res.text();
+  ITEM_DB = parseTSV(text);
+  load();
+  renderCategories();
+  renderShop();
+  updateCart();
+}
+
+/* ===== TSVパース ===== */
+function parseTSV(tsv){
+  const lines = tsv.trim().split("\n");
+  const headers = lines[0].split("\t");
+
+  return lines.slice(1).map((line, i) => {
+    const values = line.split("\t");
+    let row = { id: i };
+
+    headers.forEach((h, idx) => {
+      row[h] = values[idx];
+    });
+
+    return {
+      id: i,
+      name: row["名称"],
+      price: Number(row["値段"]),
+      unit: row["単位"],
+      type: row["分類"],
+      source: row["出展"]
+    };
+  });
+}
+
+/* ===== カテゴリ ===== */
+function renderCategories(){
+  categoryList.innerHTML = "";
+  const types = ["all", ...TYPE_ORDER.filter(t =>
+    ITEM_DB.some(i => i.type === t)
+  )];
+
+  types.forEach(t=>{
+    const div = document.createElement("div");
+    div.className = "category";
+    div.textContent = TYPE_LABEL[t] || t;
+    div.onclick = ()=>{
+      currentCategory = t;
+      renderShop();
+    };
+    categoryList.appendChild(div);
+  });
+}
+
+/* ===== 商品表示 ===== */
+function renderShop(){
+  shop.innerHTML = "";
+  ITEM_DB
+    .slice()
+    .sort((a,b)=>TYPE_ORDER.indexOf(a.type)-TYPE_ORDER.indexOf(b.type))
+    .filter(i=>currentCategory==="all"||i.type===currentCategory)
+    .forEach(item=>{
+      const div=document.createElement("div");
+      div.className="item";
+      if(cart.find(c=>c.id===item.id)) div.classList.add("selected");
+
+      div.innerHTML=`
+        <div class="tooltip">${item.desc}</div>
+        <b>${item.name}</b><br>
+        ￥${item.price}
+      `;
+      div.onclick=()=>toggle(item);
+      shop.appendChild(div);
+    });
+}
+
+/* ===== カート ===== */
+function toggle(item){
+  const i = cart.findIndex(c=>c.id===item.id);
+  if(i>=0) cart.splice(i,1);
+  else cart.push(item);
+  save();
+  renderShop();
+  updateCart();
+}
+
+function updateCart(){
+  cartList.innerHTML="";
+  cart.forEach(i=>{
+    const d=document.createElement("div");
+    d.className="cart-item";
+    d.innerHTML=`
+      ${i.name} ￥${i.price}
+      <button onclick="removeItem(${i.id})">×</button>
+    `;
+    cartList.appendChild(d);
+  });
+  total.textContent = cart.reduce((a,b)=>a+b.price,0);
+}
+
+/* ===== その他 ===== */
+function removeItem(id){
+  cart = cart.filter(i=>i.id!==id);
+  save();
+  renderShop();
+  updateCart();
+}
+
+function copyResult(){
+  let text="";
+  cart.forEach(i=>text+=`${i.name}\t${i.price}\n`);
+  text+=`合計\t${cart.reduce((a,b)=>a+b.price,0)}`;
+  navigator.clipboard.writeText(text);
+  alert("コピーしました");
+}
+
+function save(){ localStorage.setItem("cart",JSON.stringify(cart)); }
+function load(){ const d=localStorage.getItem("cart"); if(d) cart=JSON.parse(d); }
+function resetAll(){
+  cart=[];
+  localStorage.clear();
+  renderShop();
+  updateCart();
+}
+
+init();
+</script>
+</body>
 </html>
