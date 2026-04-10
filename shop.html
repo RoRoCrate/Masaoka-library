@@ -155,10 +155,13 @@ form button:hover{
     background:#9a7740;
 }
 #cartList{
-  flex: 1;               /* cart内で余った高さを取る */
-  overflow-y: auto;      /* 縦スクロールを有効化 */
-  min-height: 0;         /* flexスクロールで必須 */
+  flex: 1;
+  min-height: 0;
+
+  overflow-y: auto;   /* 縦スクロールバーのみ */
+  overflow-x: hidden; /* 横スクロールバーを完全禁止 */
 }
+
 #total{
   margin-top: 10px;
   padding-top: 10px;
