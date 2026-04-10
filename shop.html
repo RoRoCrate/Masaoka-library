@@ -340,7 +340,6 @@ function copyResult(){
 function save(){localStorage.setItem("cart",JSON.stringify(cart));}
 function load(){const d=localStorage.getItem("cart"); if(d) cart=JSON.parse(d);}
 function resetAll(){cart=[];localStorage.clear();renderShop();updateCart();}
-
 init();
 </script>
 </body>
