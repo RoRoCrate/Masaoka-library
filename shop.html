@@ -7,11 +7,47 @@
 <link rel="stylesheet" href="common.css">
 
 <style>
+  
 body{
-  margin:0;
-  background:#0a0705;
-  font-family:serif;
-  color:#d6b873;
+    padding-top:60px;
+    background:#120b06;
+    color:#e6d8b8;
+    font-family:"Yu Mincho","Hiragino Mincho ProN",serif;
+}
+
+.help-wrapper{
+    max-width:900px;
+    margin:40px auto;
+    padding:30px;
+    background:#1f140b;
+    border:1px solid #6b4b2a;
+    border-radius:12px;
+    box-shadow:0 0 12px rgba(0,0,0,0.6);
+}
+
+h1{
+    text-align:center;
+    margin-bottom:30px;
+    letter-spacing:0.2em;
+}
+
+.section{
+    border-top:1px solid #6b4b2a;
+    padding-top:20px;
+    margin-top:30px;
+}
+
+.section h2{
+    color:#d6b873;
+    margin-bottom:12px;
+}
+
+ul{
+    padding-left:20px;
+}
+
+li{
+    margin-bottom:6px;
 }
 .container{
   display:grid;
@@ -85,10 +121,63 @@ button{
   border:1px solid #6b4b2a;
   cursor:pointer;
 }
+/* ===== フォーム ===== */
+
+.form-row{
+    display:flex;
+    flex-direction:column;
+    margin-bottom:14px;
+}
+
+.form-row label{
+    color:#d6b873;
+    margin-bottom:4px;
+}
+
+input, textarea{
+    background:#2a1a10;
+    border:1px solid #6b4b2a;
+    color:#e6d8b8;
+    padding:6px;
+    border-radius:6px;
+}
+
+input:focus, textarea:focus{
+    outline:none;
+    border-color:#d6b873;
+}
+
+form button{
+    background:#7a5a2e;
+    color:#fff;
+    border:none;
+    padding:8px 18px;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+form button:hover{
+    background:#9a7740;
+}
 </style>
 </head>
 
 <body>
+  
+<div class="top-white-bar">
+リンバスTRPG　正岡式としょんか
+</div>
+
+<nav class="global-nav">
+  <a href="index.html">受付</a>
+  <a href="database.html">資料室</a>
+  <a href="trial.html">試用室</a>
+  <a href="shop.html" class="active">購買</a>
+  <a href="workshop.html">基礎室</a>
+  <a href="help.html">案内板</a>
+</nav>
+
+<div class="help-wrapper">
 <div class="container">
 
 <div class="sidebar">
