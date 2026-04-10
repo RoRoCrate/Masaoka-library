@@ -251,7 +251,6 @@ function renderShop(){
       const inCart=cart.find(c=>c.id===item.id);
       if(inCart) div.classList.add("selected");
       div.innerHTML=`
-        <div class="tooltip">概要：${item.desc}<br>出展：${item.source}</div>
         <b>${item.name}</b><br>
         ${item.price}${item.unit}${inCart?.qty?" ×"+inCart.qty:""}
       `;
