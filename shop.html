@@ -7,26 +7,45 @@
 <link rel="stylesheet" href="common.css">
 
 <style>
-/* ===== 共通 ===== */
-*, *::before, *::after{
-  box-sizing: border-box;
-}
-
+  
 body{
-  margin:0;
-  padding-top:60px;
-  background:#120b06;
-  color:#e6d8b8;
-  font-family:"Yu Mincho","Hiragino Mincho ProN",serif;
+    padding-top:60px;
+    background:#120b06;
+    color:#e6d8b8;
+    font-family:"Yu Mincho","Hiragino Mincho ProN",serif;
 }
 
+
+
+h1{
+    text-align:center;
+    margin-bottom:30px;
+    letter-spacing:0.2em;
+}
+
+.section{
+    border-top:1px solid #6b4b2a;
+    padding-top:20px;
+    margin-top:30px;
+}
+
+.section h2{
+    color:#d6b873;
+    margin-bottom:12px;
+}
+
+ul{
+    padding-left:20px;
+}
+
+li{
+    margin-bottom:6px;
+}
 .container{
   display:grid;
   grid-template-columns:220px 1fr 320px;
-  height: calc(100vh - 60px);
+  height:100vh;
 }
-
-/* ===== 左 ===== */
 .sidebar{
   background:#1a120a;
   padding:15px;
@@ -39,12 +58,7 @@ body{
   cursor:pointer;
 }
 .category:hover{ background:#3b2a1a; }
-
-/* ===== 中央 ===== */
-.main{
-  padding:15px;
-  overflow-y:auto;
-}
+.main{ padding:15px; overflow-y:auto; }
 .grid{
   display:grid;
   grid-template-columns:repeat(3,1fr);
@@ -65,105 +79,119 @@ body{
   left:0;
   background:#000;
   color:#fff;
-  padding:6px;
+  padding:5px;
   font-size:12px;
   display:none;
-  white-space:nowrap;
 }
 .item:hover .tooltip{ display:block; }
 
-/* ===== 右（スクロール対応） ===== */
 .cart{
   background:#1a140e;
   padding:15px;
   border-left:1px solid #6b4b2a;
-
-  display:flex;
-  flex-direction:column;
-  height:100%;
 }
-
-#cartList{
-  flex:1;
-  overflow-y:auto;
-  min-height:0;
-}
-
 .cart-item{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  gap:6px;
   border-bottom:1px solid #6b4b2a;
   padding:6px 0;
-  white-space:nowrap;
-  overflow:hidden;
 }
-
-.qty-control{
-  display:flex;
-  align-items:center;
-  gap:4px;
-  flex-shrink:0;
-}
-
 .qty-btn{
-  width:22px;
-  height:22px;
   background:#3b2a1a;
   color:#d6b873;
   border:1px solid #6b4b2a;
-  padding:0;
+  padding:2px 6px;
   cursor:pointer;
 }
-
-#total{
-  margin-top:10px;
-  padding-top:10px;
-  border-top:1px solid #6b4b2a;
-  flex-shrink:0;
-}
-
-.cart button.copy{
+button{
+  width:100%;
   margin-top:10px;
   padding:8px;
   background:#3b2a1a;
   color:#d6b873;
   border:1px solid #6b4b2a;
   cursor:pointer;
-  flex-shrink:0;
+}
+/* ===== フォーム ===== */
+
+.form-row{
+    display:flex;
+    flex-direction:column;
+    margin-bottom:14px;
+}
+
+.form-row label{
+    color:#d6b873;
+    margin-bottom:4px;
+}
+
+input, textarea{
+    background:#2a1a10;
+    border:1px solid #6b4b2a;
+    color:#e6d8b8;
+    padding:6px;
+    border-radius:6px;
+}
+
+input:focus, textarea:focus{
+    outline:none;
+    border-color:#d6b873;
+}
+
+form button{
+    background:#7a5a2e;
+    color:#fff;
+    border:none;
+    padding:8px 18px;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+form button:hover{
+    background:#9a7740;
 }
 </style>
 </head>
 
 <body>
+  
+<div class="top-white-bar">
+リンバスTRPG　正岡式としょんか
+</div>
 
+<nav class="global-nav">
+  <a href="index.html">受付</a>
+  <a href="database.html">資料室</a>
+  <a href="trial.html">試用室</a>
+  <a href="shop.html" class="active">購買</a>
+  <a href="workshop.html">基礎室</a>
+  <a href="help.html">案内板</a>
+</nav>
+
+<div class="help-wrapper">
 <div class="container">
 
-<!-- 左 -->
 <div class="sidebar">
   <h3>分類</h3>
   <div id="categoryList"></div>
   <button onclick="resetAll()">全リセット</button>
 </div>
 
-<!-- 中央 -->
 <div class="main">
   <div class="grid" id="shop"></div>
 </div>
 
-<!-- 右 -->
 <div class="cart">
   <h3>選択</h3>
   <div id="cartList"></div>
   <div id="total"></div>
-  <button class="copy" onclick="copyResult()">コピー</button>
+  <button onclick="copyResult()">コピー</button>
 </div>
 
 </div>
 
 <script>
-/* ===== 設定 ===== */
 const TYPE_ORDER=["identity","ego","suppassive","mental","strengthening","item"];
 const TYPE_LABEL={
   identity:"人格", ego:"E.G.O", suppassive:"サポートパッシブ",
@@ -172,7 +200,7 @@ const TYPE_LABEL={
 
 let ITEM_DB=[], cart=[], currentCategory="all";
 
-/* ===== 初期化 ===== */
+/* 初期化 */
 async function init(){
   const res=await fetch("./data/shop.tsv");
   const text=await res.text();
@@ -183,26 +211,18 @@ async function init(){
   updateCart();
 }
 
-/* ===== TSV ===== */
+/* TSV */
 function parseTSV(tsv){
-  const lines=tsv.trim().split("\n");
-  const headers=lines[0].split("\t");
-  return lines.slice(1).map((line,i)=>{
-    const v=line.split("\t"), r={};
-    headers.forEach((h,j)=>r[h]=v[j]);
-    return {
-      id:i,
-      name:r["名称"],
-      price:+r["値段"],
-      unit:r["単位"],
-      type:r["分類"],
-      desc:r["概要"],
-      source:r["出展"]
-    };
+  const l=tsv.trim().split("\n");
+  const h=l[0].split("\t");
+  return l.slice(1).map((line,i)=>{
+    const v=line.split("\t"); let r={};
+    h.forEach((k,j)=>r[k]=v[j]);
+    return {id:i,name:r["名称"],price:+r["値段"],unit:r["単位"],type:r["分類"],desc:r["概要"],source:r["出展"]};
   });
 }
 
-/* ===== カテゴリ ===== */
+/* カテゴリ */
 function renderCategories(){
   categoryList.innerHTML="";
   const types=["all",...TYPE_ORDER.filter(t=>ITEM_DB.some(i=>i.type===t))];
@@ -215,29 +235,28 @@ function renderCategories(){
   });
 }
 
-/* ===== 商品 ===== */
+/* 商品 */
 function renderShop(){
   shop.innerHTML="";
   ITEM_DB
-    .slice()
-    .sort((a,b)=>TYPE_ORDER.indexOf(a.type)-TYPE_ORDER.indexOf(b.type))
+    .slice().sort((a,b)=>TYPE_ORDER.indexOf(a.type)-TYPE_ORDER.indexOf(b.type))
     .filter(i=>currentCategory==="all"||i.type===currentCategory)
     .forEach(item=>{
       const div=document.createElement("div");
       div.className="item";
-      const f=cart.find(c=>c.id===item.id);
-      if(f) div.classList.add("selected");
+      const inCart=cart.find(c=>c.id===item.id);
+      if(inCart) div.classList.add("selected");
       div.innerHTML=`
         <div class="tooltip">概要：${item.desc}<br>出展：${item.source}</div>
         <b>${item.name}</b><br>
-        ${item.price}${item.unit}${f?.qty?" ×"+f.qty:""}
+        ${item.price}${item.unit}${inCart?.qty?" ×"+inCart.qty:""}
       `;
       div.onclick=()=>toggle(item);
       shop.appendChild(div);
     });
 }
 
-/* ===== カート操作 ===== */
+/* 追加 */
 function toggle(item){
   const f=cart.find(i=>i.id===item.id);
   if(item.type==="item"){
@@ -249,19 +268,19 @@ function toggle(item){
   save(); renderShop(); updateCart();
 }
 
+/* ＋ − */
 function addQty(id){
-  const i=cart.find(x=>x.id===id);
-  if(i){i.qty++; save(); renderShop(); updateCart();}
+  const i=cart.find(x=>x.id===id); if(i){i.qty++;save();updateCart();renderShop();}
 }
 function subQty(id){
   const i=cart.find(x=>x.id===id);
   if(!i) return;
   if(i.qty>1) i.qty--;
   else cart=cart.filter(x=>x.id!==id);
-  save(); renderShop(); updateCart();
+  save(); updateCart(); renderShop();
 }
 
-/* ===== 合計 ===== */
+/* 合計 */
 function calcTotal(){
   const t={};
   cart.forEach(i=>{
@@ -271,23 +290,26 @@ function calcTotal(){
   return t;
 }
 
+/* 表示 */
 function updateCart(){
   cartList.innerHTML="";
   cart.forEach(i=>{
     const q=i.qty||1;
     const d=document.createElement("div");
     d.className="cart-item";
+
     if(i.type==="item"){
       d.innerHTML=`
-        <span>${i.name} ${i.price*q}${i.unit}</span>
-        <span class="qty-control">
+        ${i.name} ${i.price*q}${i.unit}
+        <span>
           <button class="qty-btn" onclick="subQty(${i.id})">−</button>
           ${q}
           <button class="qty-btn" onclick="addQty(${i.id})">＋</button>
         </span>
       `;
     }else{
-      d.innerHTML=`<span>${i.name} ${i.price}${i.unit}</span>`;
+      d.innerHTML=`${i.name} ${i.price}${i.unit}
+        <button class="qty-btn" onclick="subQty(${i.id})">×</button>`;
     }
     cartList.appendChild(d);
   });
@@ -301,7 +323,7 @@ function updateCart(){
   });
 }
 
-/* ===== その他 ===== */
+/* コピー */
 function copyResult(){
   let txt="";
   cart.forEach(i=>{
@@ -315,9 +337,9 @@ function copyResult(){
   alert("コピーしました");
 }
 
-function save(){ localStorage.setItem("cart",JSON.stringify(cart)); }
-function load(){ const d=localStorage.getItem("cart"); if(d) cart=JSON.parse(d); }
-function resetAll(){ cart=[]; localStorage.clear(); renderShop(); updateCart(); }
+function save(){localStorage.setItem("cart",JSON.stringify(cart));}
+function load(){const d=localStorage.getItem("cart"); if(d) cart=JSON.parse(d);}
+function resetAll(){cart=[];localStorage.clear();renderShop();updateCart();}
 
 init();
 </script>
