@@ -267,7 +267,6 @@ function toggle(item){
   }
   save(); renderShop(); updateCart();
 }
-
 /* ＋ − */
 function addQty(id){
   const i=cart.find(x=>x.id===id); if(i){i.qty++;save();updateCart();renderShop();}
@@ -340,6 +339,7 @@ function copyResult(){
 function save(){localStorage.setItem("cart",JSON.stringify(cart));}
 function load(){const d=localStorage.getItem("cart"); if(d) cart=JSON.parse(d);}
 function resetAll(){cart=[];localStorage.clear();renderShop();updateCart();}
+
 init();
 </script>
 </body>
