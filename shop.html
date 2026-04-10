@@ -267,6 +267,7 @@ function toggle(item){
   }
   save(); renderShop(); updateCart();
 }
+
 /* ＋ − */
 function addQty(id){
   const i=cart.find(x=>x.id===id); if(i){i.qty++;save();updateCart();renderShop();}
