@@ -535,18 +535,18 @@ const SEARCH_FIELDS = {
     
         'suppassive': [
         { id: 'f_type', label: '種別', type: 'select', options: ['', '通常', '死亡', 'SP通常'], csvKey: '種別' },
+        { id: 'f_price', label: '価格以下', type: 'number', csvKey: '価格' },
         { id: 'f_res', label: '資源', type: 'select', options: ['', '憤怒', '色欲', '怠惰', '暴食', '憂鬱', '傲慢', '嫉妬', 'なし'], csvKey: '資源' },
-        { id: 'f_own', label: '発動条件', type: 'select', options: ['', '保有', '共鳴', 'なし'], csvKey: '保有・共鳴' },
-        { id: 'f_price', label: '価格以下', type: 'number', csvKey: '価格' }
+        { id: 'f_own', label: '発動条件', type: 'select', options: ['', '保有', '共鳴', 'なし'], csvKey: '保有・共鳴' }
     ],
     
     'mental': [{ id: 'f_name', label: '名称', type: 'text', csvKey: '名称' }, { id: 'f_price', label: '価格以下', type: 'number', csvKey: '価格' }],
     
     'ego': [
         { id: 'f_no', label: '番号 (完全一致)', type: 'text', csvKey: '番号' },
-        { id: 'f_name', label: '名称', type: 'text', csvKey: '名称' },
+        { id: 'f_price', label: '価格以下', type: 'number', csvKey: '価格' },
         { id: 'f_rank', label: '危険度', type: 'select', options: ['', 'ZAYIN', 'TETH', 'HE', 'WAW', 'ALEPH'], csvKey: '危険度' },
-        { id: 'f_price', label: '価格以下', type: 'number', csvKey: '価格' }
+        { id: 'f_name', label: '名称', type: 'text', csvKey: '名称' }
     ],
     
     'status': [{ id: 'f_name', label: '名称', type: 'text', csvKey: '名称' }, 
@@ -613,10 +613,48 @@ function renderFields(key) {
          if (f.id === "f_no" || f.id === "f_name") {
         div.classList.add("half-field");
     }
+        // 人格レイアウト
         if (f.id === "f_slash" || f.id === "f_blunt" || f.id === "f_pierce") 
         {
             div.classList.add("third-field");
         }
+
+        //  サポパレイアウト
+        if (key === "supportpassive") {
+
+            if (f.id === "f_type" || f.id === "f_cost") {
+                div.classList.add("half-field");
+            }
+        
+            if (f.id === "f_resource" || f.id === "f_condition") {
+                div.classList.add("half-field");
+            }
+        }
+
+        //精神
+                if (key === "mental") {     
+
+            if (f.id === "f_name" || f.id === "f_cost") {
+                div.classList.add("half-field");
+            }       
+
+        }
+
+        //EGO
+        if (key === "ego") {
+                
+            // 1行目
+            if (f.id === "f_no" || f.id === "f_cost") {
+                div.classList.add("half-field");
+            }
+        
+            // 2行目
+            if (f.id === "f_risk" || f.id === "f_name") {
+                div.classList.add("half-field");
+            }
+        
+        }
+
         const label = document.createElement('label');
         label.textContent = f.label;
         const input = document.createElement(f.type === 'select' ? 'select' : 'input');
