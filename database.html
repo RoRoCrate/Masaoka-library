@@ -146,10 +146,17 @@ h2 {
    動的検索入力 (修正版)
 ============================ */
 
+/* 人格用 */
 #searchInputsContainer{
     display:grid;
     grid-template-columns:repeat(6,minmax(0,1fr));
     gap:12px;
+}
+
+.search-input-group{
+    display:flex;
+    flex-direction:column;
+    min-width:0;
 }
 
 .half-field{
@@ -159,6 +166,21 @@ h2 {
 .third-field{
     grid-column:span 2;
 }
+
+
+/* 人格以外 */
+#searchInputsContainer.flex-layout{
+    display:flex;
+    flex-wrap:wrap;
+    gap:15px;
+    align-items:flex-end;
+}
+
+#searchInputsContainer.flex-layout .search-input-group{
+    flex:1 1 180px;
+    min-width:140px;
+}
+
 /* ============================
    共通キーワード入力欄の調整
 ============================ */
@@ -614,47 +636,21 @@ function renderFields(key) {
          if (f.id === "f_no" || f.id === "f_name") {
         div.classList.add("half-field");
     }
-        // 人格レイアウト
-        if (f.id === "f_slash" || f.id === "f_blunt" || f.id === "f_pierce") 
-        {
-            div.classList.add("third-field");
-        }
+       if (isIdentity) {
 
-        //  サポパレイアウト
-        if (key === "supportpassive") {
+    if (f.id === "f_no" || f.id === "f_name") {
+        div.classList.add("half-field");
+    }
 
-            if (f.id === "f_type" || f.id === "f_cost") {
-                div.classList.add("half-field");
-            }
-        
-            if (f.id === "f_resource" || f.id === "f_condition") {
-                div.classList.add("half-field");
-            }
-        }
+    if (
+        f.id === "f_slash" ||
+        f.id === "f_blunt" ||
+        f.id === "f_pierce"
+    ) {
+        div.classList.add("third-field");
+    }
 
-        //精神
-                if (key === "mental") {     
-
-            if (f.id === "f_name" || f.id === "f_cost") {
-                div.classList.add("half-field");
-            }       
-
-        }
-
-        //EGO
-        if (key === "ego") {
-                
-            // 1行目
-            if (f.id === "f_no" || f.id === "f_cost") {
-                div.classList.add("half-field");
-            }
-        
-            // 2行目
-            if (f.id === "f_risk" || f.id === "f_name") {
-                div.classList.add("half-field");
-            }
-        
-        }
+}
 
         const label = document.createElement('label');
         label.textContent = f.label;
