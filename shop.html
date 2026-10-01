@@ -104,7 +104,7 @@ h1{
   color:#f2cb79;
 }
 
-/* ===== 中央：明るい陳列棚 (Main) ===== */
+/* ===== 中央：陳列棚 (Main) ===== */
 .main{ 
   padding:24px; 
   overflow-y:auto; 
@@ -131,7 +131,7 @@ h1{
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: 90px;
+  min-height: 80px;
 }
 
 .item:hover {
@@ -156,8 +156,13 @@ h1{
   line-height: 1.3;
 }
 
+.item-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
 .item-price {
-  text-align: right;
   font-size: 1em;
   font-weight: bold;
   color: #7a4e21;
@@ -170,9 +175,9 @@ h1{
   font-size: 0.8em;
   padding: 1px 6px;
   border-radius: 3px;
-  margin-left: 4px;
 }
 
+/* ===== ツールチップ（ホバー時のみ表示） ===== */
 .tooltip{
   position:absolute;
   bottom:100%;
@@ -335,14 +340,32 @@ async function init(){
   updateCart();
 }
 
-/* TSV解析 */
+/* TSV解析（改行コードや空白を強力に削除してundefinedを防止） */
 function parseTSV(tsv){
-  const l=tsv.trim().split("\n");
-  const h=l[0].split("\t");
+  const l=tsv.trim().split(/\r?\n/);
+  if(l.length < 2) return [];
+  
+  // ヘッダー文字列のトリム処理
+  const h=l[0].split("\t").map(k => k.trim());
+  
   return l.slice(1).map((line,i)=>{
     const v=line.split("\t"); let r={};
-    h.forEach((k,j)=>r[k]=v[j]);
-    return {id:i,name:r["名称"],price:+r["値段"],unit:r["単位"],type:r["分類"],desc:r["概要"],source:r["出展"]};
+    h.forEach((k,j)=>{
+      r[k] = v[j] ? v[j].replace(/\r/g, "").trim() : "";
+    });
+
+    // キー名の揺れ（出展 / 出店 / 出典）に対応
+    const sourceVal = r["出展"] || r["出店"] || r["出典"] || "なし";
+
+    return {
+      id: i,
+      name: r["名称"] || "名称不明",
+      price: +(r["値段"] || 0),
+      unit: r["単位"] || "",
+      type: r["分類"] || "",
+      desc: r["概要"] || "（概要なし）",
+      source: sourceVal
+    };
   });
 }
 
@@ -377,10 +400,17 @@ function renderShop(){
       
       const qtyBadge = inCart?.qty ? `<span class="item-badge">×${inCart.qty}</span>` : "";
 
+      // ツールチップ（マウスホバー時のみ表示）
       div.innerHTML=`
-        <div class="tooltip">【概要】${item.desc}<br>【出展】${item.source}</div>
+        <div class="tooltip">
+          【概要】${item.desc}<br>
+          【出展】${item.source}
+        </div>
         <div class="item-name">${item.name}</div>
-        <div class="item-price">${item.price} ${item.unit} ${qtyBadge}</div>
+        <div class="item-bottom">
+          <div class="item-price">${item.price} ${item.unit}</div>
+          ${qtyBadge}
+        </div>
       `;
       div.onclick=()=>toggle(item);
       shop.appendChild(div);
