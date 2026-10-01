@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -479,7 +478,7 @@ footer {
 </nav>
     
 <div class="top-white-bar">
-    リンバスTRPG　正岡式としょんか
+    リンバスTRPG 正岡式としょんか
 </div>
 
 <div class="search-container">
@@ -633,24 +632,21 @@ function renderFields(key) {
     SEARCH_FIELDS[key].forEach(f => {
         const div = document.createElement('div');
         div.className = 'search-input-group';
-         if (f.id === "f_no" || f.id === "f_name") {
-        div.classList.add("half-field");
-    }
-       if (isIdentity) {
-
-    if (f.id === "f_no" || f.id === "f_name") {
-        div.classList.add("half-field");
-    }
-
-    if (
-        f.id === "f_slash" ||
-        f.id === "f_blunt" ||
-        f.id === "f_pierce"
-    ) {
-        div.classList.add("third-field");
-    }
-
-}
+        if (f.id === "f_no" || f.id === "f_name") {
+            div.classList.add("half-field");
+        }
+        if (isIdentity) {
+            if (f.id === "f_no" || f.id === "f_name") {
+                div.classList.add("half-field");
+            }
+            if (
+                f.id === "f_slash" ||
+                f.id === "f_blunt" ||
+                f.id === "f_pierce"
+            ) {
+                div.classList.add("third-field");
+            }
+        }
 
         const label = document.createElement('label');
         label.textContent = f.label;
@@ -700,31 +696,31 @@ function renderResults(data) {
     const favs = getFavorites();
 
     const html = data.map((item, idx) => {
-        // 【重要】インデックス(idx)を使わず、名称や番号で固定のIDを作る
         const uniqueKey = item['番号'] || item['名称'] || `id-${idx}`;
         const favId = `${key}_${uniqueKey}`;
         const safeId = `item-${key}-${idx}`;
 
-        // 「栞のみ表示」モードの時、栞に含まれていなければスキップ
         if (showOnlyFavorites && !favs.includes(favId)) return '';
 
-        // --- ここから contentHTML の生成処理 ---
         let contentHTML = '';
         if (key === 'identity' || key === 'singularidentity') {
             const fixedOrderHTML = `
                 <div class="field"><span class="field-label">番号</span><span class="field-value">${item['番号'] || ''}</span></div>
                 <div class="field"><span class="field-label">名称</span><span class="field-value">${item['名称'] || ''}</span></div>
-                <div class="field"><span class="field-label">能力値</span><span class="field-value">HP:${item['HP'] || ''}　SAN:${item['SAN'] || ''}　速度:${item['速度'] || ''}　弾丸:${item['弾丸'] || ''}</span></div>
-                <div class="field"><span class="field-label">耐性</span><span class="field-value">斬撃:${item['斬撃'] || ''}　打撃:${item['打撃'] || ''}　貫通:${item['貫通'] || ''}</span></div>
+                ${item['所属'] && item['所属'] !== 'なし' ? `<div class="field"><span class="field-label">所属</span><span class="field-value">${item['所属']}</span></div>` : ''}
+                <div class="field"><span class="field-label">能力値</span><span class="field-value">HP:${item['HP'] || ''} SAN:${item['SAN'] || ''} 速度:${item['速度'] || ''} 弾丸:${item['弾丸'] || ''}</span></div>
+                <div class="field"><span class="field-label">耐性</span><span class="field-value">斬撃:${item['斬撃'] || ''} 貫通:${item['貫通'] || ''} 打撃:${item['打撃'] || ''}</span></div>
             `;
-            const excludedKeys = ['番号', '名称', 'HP', 'SAN', '速度', '弾丸', '斬撃', '打撃', '貫通'];
+            const excludedKeys = ['番号', '名称', '所属', 'HP', 'SAN', '速度', '弾丸', '斬撃', '打撃', '貫通'];
+            
+            // 値が存在し、かつ「なし」でない項目のみを表示
             const restHTML = Object.entries(item)
-                .filter(([k, v]) => v && !excludedKeys.includes(k))
+                .filter(([k, v]) => v && v !== 'なし' && !excludedKeys.includes(k))
                 .map(([k, v]) => `<div class="field"><span class="field-label">${k}</span><span class="field-value">${v}</span></div>`).join('');
             contentHTML = fixedOrderHTML + restHTML;
         } else {
             contentHTML = Object.entries(item)
-                .filter(([k, v]) => v)
+                .filter(([k, v]) => v && v !== 'なし')
                 .map(([k, v]) => `<div class="field"><span class="field-label">${k}</span><span class="field-value">${v}</span></div>`).join('');
         }
 
@@ -767,7 +763,7 @@ async function copyDisplayedContent(btn) {
         const value = valueEl.innerText.trim();
 
         if (label === '能力値' || label === '耐性') {
-            value.split(/　|\s+/).forEach(part => {
+            value.split(/ |\s+/).forEach(part => {
                 const [k, v] = part.split(':');
                 if (k && v) data[k.trim()] = v.trim();
             });
@@ -779,43 +775,75 @@ async function copyDisplayedContent(btn) {
 
     let textToCopy = "";
     if (key === 'identity' || key === 'singularidentity') {
+        const hasVal = (val) => val && val.trim() !== '' && val.trim() !== 'なし';
 
-    let strengthenTacticsText = '';
+        let textLines = [];
 
-for (let i = 0; i <= 4; i++) {
+        let headerText = `名称:${data['名称'] || ''}`;
+        if (hasVal(data['所属'])) {
+            headerText += `（${data['所属']}）`;
+        }
+        textLines.push(headerText);
 
-    const name = data[`戦術${i}強化スキル名称`];
-    const effect = data[`戦術${i}強化スキル効果`];
+        textLines.push(`\nHP:${data['HP'] || ''} SAN:${data['SAN'] || ''} 速度:${data['速度'] || ''} 弾丸:${data['弾丸'] || ''}`);
+        textLines.push(`\n物理耐性 斬撃:${data['斬撃'] || ''} 貫通:${data['貫通'] || ''} 打撃:${data['打撃'] || ''}`);
 
-    // 「なし」以外なら追加
-    const hasValid =
-        (name && name.trim() !== '' && name.trim() !== 'なし') ||
-        (effect && effect.trim() !== '' && effect.trim() !== 'なし');
+        // パッシブ1
+        if (hasVal(data['パッシブ名'])) textLines.push(`\nパッシブ:${data['パッシブ名']}`);
+        if (hasVal(data['発動条件'])) textLines.push(`発動条件:${data['発動条件']}`);
+        if (hasVal(data['常時発動'])) textLines.push(`常時発動:${data['常時発動']}`);
+        if (hasVal(data['常時効果'])) textLines.push(`常時効果:${data['常時効果']}`);
+        if (hasVal(data['効果'])) textLines.push(`効果:${data['効果']}`);
 
-    if (hasValid) {
-        strengthenTacticsText += `
-戦術${i}強化:${name || ''}　${effect || ''}
-`;
-       }
-    }
+        // パッシブ2
+        if (hasVal(data['パッシブ名2'])) textLines.push(`\nパッシブ2:${data['パッシブ名2']}`);
+        if (hasVal(data['発動条件2'])) textLines.push(`発動条件2:${data['発動条件2']}`);
+        if (hasVal(data['常時発動2'])) textLines.push(`常時発動2:${data['常時発動2']}`);
+        if (hasVal(data['効果2'])) textLines.push(`効果2:${data['効果2']}`);
 
-    textToCopy = `名称:${data['名称'] || ''}
-\nHP:${data['HP'] || ''}　SAN:${data['SAN'] || ''}　速度:${data['速度'] || ''}　弾丸:${data['弾丸'] || ''}
-\n物理耐性　斬撃:${data['斬撃'] || ''}　貫通:${data['貫通'] || ''}　打撃:${data['打撃'] || ''}　
-\n${data['パッシブ名'] || ''}\n${data['発動条件'] || ''}\n${data['効果'] || ''}
-\n戦術0:${data['戦術0名称'] || ''}\n${data['戦術0効果'] || ''}
-\n戦術1:${data['戦術1名称'] || ''}\n${data['戦術1効果'] || ''}
-\n戦術2:${data['戦術2名称'] || ''}\n${data['戦術2効果'] || ''}
-\n戦術3:${data['戦術3名称'] || ''}\n${data['戦術3効果'] || ''}
-\n戦術4:${data['戦術4名称'] || ''}\n${data['戦術4効果'] || ''}
+        // 戦術0〜4
+        for (let i = 0; i <= 4; i++) {
+            const name = data[`戦術${i}名称`];
+            const effect = data[`戦術${i}効果`];
+            if (hasVal(name) || hasVal(effect)) {
+                textLines.push(`\n戦術${i}:${name || ''}\n${effect || ''}`);
+            }
 
-${strengthenTacticsText}
-強化スキル:${data['強化スキル'] || ''}
-\n固有:${data['固有'] || ''}`;
-} else if (key === 'mental') {
+            const sub2Name = data[`戦術${i}-2スキル名称`];
+            const sub2Effect = data[`戦術${i}-2スキル効果`];
+            if (hasVal(sub2Name) || hasVal(sub2Effect)) {
+                textLines.push(`戦術${i}-2スキル:${sub2Name || ''} ${sub2Effect || ''}`);
+            }
+
+            const sub3Name = data[`戦術${i}-3スキル名称`];
+            const sub3Effect = data[`戦術${i}-3スキル効果`];
+            if (hasVal(sub3Name) || hasVal(sub3Effect)) {
+                textLines.push(`戦術${i}-3スキル:${sub3Name || ''} ${sub3Effect || ''}`);
+            }
+        }
+
+        // 戦術5
+        const t5Name = data['戦術5名称'] || data['戦術5スキル名称'];
+        const t5Effect = data['戦術5効果'] || data['戦術5スキル効果'];
+        if (hasVal(t5Name) || hasVal(t5Effect)) {
+            textLines.push(`\n戦術5スキル:${t5Name || ''} ${t5Effect || ''}`);
+        }
+
+        const t5_2Name = data['戦術5-2スキル名称'];
+        const t5_2Effect = data['戦術5-2スキル効果'];
+        if (hasVal(t5_2Name) || hasVal(t5_2Effect)) {
+            textLines.push(`戦術5-2スキル:${t5_2Name || ''} ${t5_2Effect || ''}`);
+        }
+
+        if (hasVal(data['固有'])) {
+            textLines.push(`\n固有:${data['固有']}`);
+        }
+
+        textToCopy = textLines.join('\n');
+    } else if (key === 'mental') {
         textToCopy = `名称:${data['名称'] || ''}\n常時発動:${data['常時発動'] || ''}\n士気低下効果:${data['士気低下効果'] || ''}\n混乱効果:${data['混乱効果'] || ''}`;
     } else if (key === 'status') {
-        textToCopy = `【${data['名称'] || ''}】${data['分類'] || ''}　最大数:${data['最大数'] || ''}\n効果:${data['効果'] || ''}`;
+        textToCopy = `【${data['名称'] || ''}】${data['分類'] || ''} 最大数:${data['最大数'] || ''}\n効果:${data['効果'] || ''}`;
     } else if (key === 'suppassive') {
         textToCopy = `名称:${data['名称'] || ''}\n発動条件:${(data['資源'] || '')}${(data['保有・共鳴'] || '')}\n効果:${data['効果'] || ''}`;
     } else if (key === 'ego') {
@@ -825,11 +853,9 @@ ${strengthenTacticsText}
     }
 
     try {
-        // クリップボードAPI(HTTPS推奨)
         if (navigator.clipboard && window.isSecureContext) {
             await navigator.clipboard.writeText(textToCopy);
         } else {
-            // ローカル/HTTP環境用フォールバック
             const textArea = document.createElement("textarea");
             textArea.value = textToCopy;
             document.body.appendChild(textArea);
